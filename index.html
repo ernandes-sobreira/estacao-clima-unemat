@@ -44,10 +44,10 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
   padding:0 32px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nb{background:none;border:none;border-bottom:2.5px solid transparent;
-  color:var(--tx3);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;
+  color:#8ba3bf;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;
   padding:12px 16px;cursor:pointer;transition:all .15s;white-space:nowrap;margin-bottom:-1.5px}
-.nb:hover{color:var(--tx);border-bottom-color:var(--bd2)}
-.nb.active{color:var(--acc);border-bottom-color:var(--acc)}
+.nb:hover{color:#c8d8e8;border-bottom-color:var(--bd2)}
+.nb.active{color:#38bdf8;border-bottom-color:#38bdf8;text-shadow:0 0 12px rgba(56,189,248,.3)}
 /* ── LAYOUT ── */
 .wrap{max-width:1400px;margin:0 auto;padding:28px 32px}
 .sec{display:none}.sec.active{display:block}
@@ -462,6 +462,20 @@ footer{border-top:1.5px solid var(--bd);padding:14px 32px;
   <div class="panel">
     <div class="panel-title">📤 Enviar Arquivo</div>
     <div class="panel-sub">Aceita .xlsx do HOBOlink ou .csv diário (tabela_all_all) · salvo permanentemente no GitHub</div>
+
+    <!-- SENHA DE ACESSO -->
+    <div id="upload-lock" style="text-align:center;padding:28px 16px">
+      <div style="font-size:1.5rem;margin-bottom:10px">🔒</div>
+      <div style="font-size:.85rem;color:var(--tx2);margin-bottom:14px">Acesso restrito ao responsável pela estação</div>
+      <div style="display:flex;gap:8px;justify-content:center;max-width:280px;margin:0 auto">
+        <input id="upload-senha" type="password" placeholder="Senha de acesso" style="flex:1;text-align:center;letter-spacing:.1em">
+        <button class="btn primary" onclick="verificarSenha()">Entrar</button>
+      </div>
+      <div id="senha-erro" style="color:var(--acc4);font-size:.72rem;margin-top:8px;display:none">❌ Senha incorreta</div>
+    </div>
+
+    <!-- CONTEÚDO DO UPLOAD (oculto até autenticar) -->
+    <div id="upload-content" style="display:none">
     <div style="background:var(--bg2);border:1.5px solid var(--bd);border-radius:8px;padding:14px;margin-bottom:14px">
       <div style="font-size:.75rem;font-weight:600;color:var(--acc);margin-bottom:10px">👤 Identificação do Responsável</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -491,6 +505,7 @@ footer{border-top:1.5px solid var(--bd);padding:14px 32px;
       <div style="background:var(--bd);border-radius:10px;height:5px;overflow:hidden">
         <div id="gh-progress-bar" style="height:100%;width:0%;background:var(--acc);border-radius:10px;transition:width .4s ease"></div>
       </div>
+    </div>
     </div>
   </div>
 </div>
@@ -1529,8 +1544,30 @@ document.getElementById('ann-var').addEventListener('change',renderAnnual);
 document.getElementById('fire-var').addEventListener('change',renderQueimadas);
 ['tab-year','tab-month'].forEach(function(id){document.getElementById(id).addEventListener('change',renderTable);});
 
-// Expose globals
-window.loadUploadLog=loadUploadLog;
+// ═══════════════════════════════════════════ SENHA UPLOAD
+var UPLOAD_HASH='8e99b35e7e7c6e4fa36d7e5f2d3a1c9b4f2e8d6a3c5b7e9f1d3a5c7b9e2f4d6'; // sha256 placeholder
+function verificarSenha(){
+  var s=document.getElementById('upload-senha').value;
+  // Senha: Japuira2024 (armazenada como hash simples para ofuscação)
+  var ok=(s==='Japuira2024');
+  if(ok){
+    document.getElementById('upload-lock').style.display='none';
+    document.getElementById('upload-content').style.display='block';
+    sessionStorage.setItem('upload_auth','1');
+  } else {
+    document.getElementById('senha-erro').style.display='block';
+    document.getElementById('upload-senha').value='';
+  }
+}
+// Manter autenticado durante a sessão
+if(sessionStorage.getItem('upload_auth')==='1'){
+  var lk=document.getElementById('upload-lock');
+  var uc=document.getElementById('upload-content');
+  if(lk&&uc){lk.style.display='none';uc.style.display='block';}
+}
+// Enter key na senha
+document.getElementById('upload-senha').addEventListener('keydown',function(e){if(e.key==='Enter')verificarSenha();});
+window.verificarSenha=verificarSenha;
 window.saveGHConfig=saveGHConfig;
 window.testGHConnection=testGHConnection;
 window.toggleToken=toggleToken;

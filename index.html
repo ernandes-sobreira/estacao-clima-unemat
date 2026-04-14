@@ -1331,51 +1331,65 @@ function parseDailyCsv(text){
 function parseHoboXlsx(ab){
   var wb=XLSX.read(new Uint8Array(ab),{type:'array'});
   var sh=wb.SheetNames.filter(function(n){return !n.toLowerCase().includes('event');})[0]||wb.SheetNames[0];
-  var raw=XLSX.utils.sheet_to_json(wb.Sheets[sh],{header:1,raw:false,defval:''});
+  var raw=XLSX.utils.sheet_to_json(wb.Sheets[sh],{header:1,raw:true,defval:null});
+  if(!raw||!raw.length) throw new Error('Arquivo vazio');
+
+  // Detect if first row is header (has 'Date' string) or already data
   var hRow=-1;
-  for(var i=0;i<Math.min(12,raw.length);i++){
-    if(raw[i]&&raw[i].some(function(c){var s=String(c||'').toLowerCase();return s.includes('date')||s.includes('timestamp');})){hRow=i;break;}
+  for(var i=0;i<Math.min(10,raw.length);i++){
+    if(raw[i]&&raw[i].some(function(c){return String(c||'').toLowerCase()==='date'||String(c||'').toLowerCase()==='timestamp';})){hRow=i;break;}
   }
-  if(hRow<0) throw new Error('Header não encontrado');
-  var hdrs=raw[hRow];
-  var rows=raw.slice(hRow+1).filter(function(r){return r&&r.length>2&&String(r[0]||r[1]||'').trim();});
-  function fi(kws){return hdrs.findIndex(function(h){return kws.some(function(k){return String(h||'').toLowerCase().includes(k);});});}
-  var di=fi(['date','data']),ti=fi(['time','hora']),tmi=fi(['temperature']),
-      hi=fi(['rh','humidity']),ri=fi(['rain','precip']),si=fi(['solar','radiation']),
-      wi=fi(['wind speed']),gti=fi(['gust']),dpi=fi(['dew']),pi=fi(['pressure','baro']);
-  function pv(row,idx){if(idx<0||row[idx]===null||row[idx]==='')return null;var v=parseFloat(String(row[idx]).replace(',','.'));return isNaN(v)?null:v;}
-  function pd(row){
+
+  var di,ti,tmi,hi,ri,si,wi,gti,dpi,pi;
+  var rows;
+
+  if(hRow>=0){
+    // Has explicit header row
+    var hdrs=raw[hRow];
+    rows=raw.slice(hRow+1);
+    function fi2(kws){return hdrs.findIndex(function(h){return kws.some(function(k){return String(h||'').toLowerCase().includes(k);});});}
+    di=fi2(['date','data']);ti=fi2(['time','hora']);tmi=fi2(['temperature']);
+    hi=fi2(['rh','humidity']);ri=fi2(['rain','precip']);si=fi2(['solar','radiation']);
+    wi=fi2(['wind speed']);gti=fi2(['gust']);dpi=fi2(['dew']);pi=fi2(['pressure','baro']);
+  } else {
+    // HOBOlink format: SheetJS skips metadata, data starts at row 0
+    // Fixed columns: 0=Line#, 1=Date(dd/mm/yy), 2=Time, 3=Battery,
+    // 4=Pressure, 5=Rain, 6=Solar, 7=Temp, 8=RH, 9=DewPoint, 10=WindSpeed, 11=GustSpeed, 12=WindDir
+    rows=raw;
+    di=1;ti=2;tmi=7;hi=8;ri=5;si=6;wi=10;gti=11;dpi=9;pi=4;
+  }
+
+  function pv(row,idx){if(idx<0||row[idx]===null||row[idx]===undefined||row[idx]==='')return null;var v=parseFloat(String(row[idx]).replace(',','.'));return isNaN(v)?null:v;}
+
+  function parseDate(row){
     var d=String(row[di]||'').trim();
-    // ISO format: 2026-03-05
+    if(!d) return null;
+    // ISO: 2026-03-05
     if(/^\d{4}-\d{2}-\d{2}/.test(d)) return d.slice(0,10);
-    // HOBOlink format: dd/mm/yy or dd/mm/yyyy (day always first in Brazilian HOBOlink)
-    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){
+    // dd/mm/yy or dd/mm/yyyy (HOBOlink Brazilian format — day always first)
+    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(d)){
       var p=d.split('/');
       var day=parseInt(p[0]),mon=parseInt(p[1]);
       var yr=p[2].length===2?'20'+p[2]:p[2];
-      // HOBOlink exports always dd/mm/yy — day first
       return yr+'-'+String(mon).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-    }
-    // mm/dd/yy fallback (US format)
-    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){
-      var p=d.split('/');var y=p[2].length===2?'20'+p[2]:p[2];
-      var a=parseInt(p[0]),b=parseInt(p[1]);
-      if(a>12) return y+'-'+String(b).padStart(2,'0')+'-'+String(a).padStart(2,'0');
-      return y+'-'+String(a).padStart(2,'0')+'-'+String(b).padStart(2,'0');
     }
     return null;
   }
+
   var byDay={};
   rows.forEach(function(row){
-    var ds=pd(row);if(!ds||ds.length!==10)return;
-    if(!byDay[ds])byDay[ds]={date:ds,year:parseInt(ds.slice(0,4)),month:parseInt(ds.slice(5,7)),temps:[],hums:[],rains:[],solars:[],winds:[],gusts:[],dews:[],prs:[],n:0};
+    if(!row||row.length<3) return;
+    var ds=parseDate(row);
+    if(!ds||ds.length!==10) return;
+    if(!byDay[ds]) byDay[ds]={date:ds,year:parseInt(ds.slice(0,4)),month:parseInt(ds.slice(5,7)),temps:[],hums:[],rains:[],solars:[],winds:[],gusts:[],dews:[],prs:[],n:0};
     var bd=byDay[ds];
     var t=pv(row,tmi),h=pv(row,hi),r=pv(row,ri),s=pv(row,si),w=pv(row,wi),g=pv(row,gti),dp=pv(row,dpi),p=pv(row,pi);
     if(t!=null)bd.temps.push(t);if(h!=null)bd.hums.push(h);if(r!=null)bd.rains.push(r);
     if(s!=null)bd.solars.push(s);if(w!=null)bd.winds.push(w);if(g!=null)bd.gusts.push(g);
     if(dp!=null)bd.dews.push(dp);if(p!=null)bd.prs.push(p);bd.n++;
   });
-  return Object.values(byDay).map(function(d){
+
+  var result=Object.values(byDay).map(function(d){
     var tm=avg(d.temps),tn=minV(d.temps),tx=maxV(d.temps);
     return {date:d.date,year:d.year,month:d.month,
       temp_mean:tm!=null?Math.round(tm*100)/100:null,
@@ -1392,6 +1406,9 @@ function parseHoboXlsx(ab){
       dew_point_mean:avg(d.dews)!=null?Math.round(avg(d.dews)*100)/100:null,
       n_obs:d.n};
   }).sort(function(a,b){return a.date.localeCompare(b.date);});
+
+  if(!result.length) throw new Error('Nenhum dia encontrado no arquivo');
+  return result;
 }
 
 async function saveToGitHub(newRec,fileName,name,inst,note){

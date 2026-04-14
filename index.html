@@ -1336,8 +1336,23 @@ function parseHoboXlsx(ab){
   function pv(row,idx){if(idx<0||row[idx]===null||row[idx]==='')return null;var v=parseFloat(String(row[idx]).replace(',','.'));return isNaN(v)?null:v;}
   function pd(row){
     var d=String(row[di]||'').trim();
-    if(/^\d{4}-\d{2}-\d{2}/.test(d))return d.slice(0,10);
-    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){var p=d.split('/');var y=p[2].length===2?'20'+p[2]:p[2];var a=parseInt(p[0]),b=parseInt(p[1]);if(a>12)return y+'-'+String(b).padStart(2,'0')+'-'+String(a).padStart(2,'0');return y+'-'+String(a).padStart(2,'0')+'-'+String(b).padStart(2,'0');}
+    // ISO format: 2026-03-05
+    if(/^\d{4}-\d{2}-\d{2}/.test(d)) return d.slice(0,10);
+    // HOBOlink format: dd/mm/yy or dd/mm/yyyy (day always first in Brazilian HOBOlink)
+    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){
+      var p=d.split('/');
+      var day=parseInt(p[0]),mon=parseInt(p[1]);
+      var yr=p[2].length===2?'20'+p[2]:p[2];
+      // HOBOlink exports always dd/mm/yy — day first
+      return yr+'-'+String(mon).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    }
+    // mm/dd/yy fallback (US format)
+    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){
+      var p=d.split('/');var y=p[2].length===2?'20'+p[2]:p[2];
+      var a=parseInt(p[0]),b=parseInt(p[1]);
+      if(a>12) return y+'-'+String(b).padStart(2,'0')+'-'+String(a).padStart(2,'0');
+      return y+'-'+String(a).padStart(2,'0')+'-'+String(b).padStart(2,'0');
+    }
     return null;
   }
   var byDay={};

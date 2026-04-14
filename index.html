@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Estação Climatológica · UNEMAT · Cáceres-MT</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -154,18 +157,29 @@ footer{border-top:1.5px solid var(--bd);padding:14px 32px;
 <body>
 <div id="toast"></div>
 
+<!-- ÚLTIMA ATUALIZAÇÃO BANNER -->
+<div id="update-banner" style="
+  background:linear-gradient(90deg,rgba(56,189,248,.15),rgba(52,211,153,.10));
+  border-bottom:1px solid rgba(56,189,248,.25);
+  padding:7px 32px;display:flex;align-items:center;gap:10px;
+  font-size:.72rem;color:#94a3b8;font-family:'DM Mono',monospace;">
+  <span style="color:#34d399;font-size:.9rem">●</span>
+  <span>Última atualização dos dados:</span>
+  <strong id="last-update-date" style="color:#38bdf8;font-size:.85rem;letter-spacing:.04em">—</strong>
+  <span id="last-update-days" style="color:#64748b;margin-left:4px"></span>
+</div>
+
 <header class="hdr">
   <div class="logo-wrap">
     <div class="logo-dot"></div>
     <div>
       <div class="logo-title">Estação Climatológica · UNEMAT · Cáceres-MT</div>
-      <div class="logo-sub">Pantanal Norte · Dados Diários · Out/2020 → Mar/2026</div>
+      <div class="logo-sub">Pantanal Norte · Dados Diários · <span id="hdr-period-sub">carregando…</span></div>
     </div>
   </div>
   <div class="hdr-chips">
     <div class="chip">Obs. <strong id="hdr-obs">—</strong></div>
     <div class="chip">Dias <strong id="hdr-dias">—</strong></div>
-    <div class="chip">Período <strong id="hdr-range">—</strong></div>
   </div>
 </header>
 
@@ -1446,18 +1460,36 @@ async function loadUploadLog(){
 
 // ═══════════════════════════════════════════ INIT
 var maxD=DAILY[DAILY.length-1].date;
+var minD=DAILY[0].date;
 var d1y=new Date(maxD);d1y.setFullYear(d1y.getFullYear()-1);
 var d1ys=d1y.toISOString().slice(0,10);
 document.getElementById('exp-from').value=d1ys;
 document.getElementById('exp-to').value=maxD;
-document.getElementById('stat-from').value=d1ys;
+document.getElementById('stat-from').value=minD;
 document.getElementById('stat-to').value=maxD;
 
 // Header stats
 var totalObs=DAILY.reduce(function(s,d){return s+(d.n_obs||0);},0);
 document.getElementById('hdr-obs').textContent=totalObs.toLocaleString('pt-BR');
 document.getElementById('hdr-dias').textContent=DAILY.length.toLocaleString('pt-BR');
-document.getElementById('hdr-range').textContent=DAILY[0].date.slice(0,7)+' → '+maxD.slice(0,7);
+
+// Dynamic period in subtitle
+var startMon=DAILY[0].date.slice(0,7).replace('-','/');
+var endMon=maxD.slice(0,7).replace('-','/');
+document.getElementById('hdr-period-sub').textContent=startMon+' → '+endMon;
+
+// Last update banner
+var lastDate=maxD; // e.g. "2026-04-14"
+var parts=lastDate.split('-');
+var lastDateFmt=parts[2]+'/'+parts[1]+'/'+parts[0];
+document.getElementById('last-update-date').textContent=lastDateFmt;
+// Days since last update
+var today=new Date();
+var lastD=new Date(lastDate+'T12:00:00');
+var diffDays=Math.floor((today-lastD)/(1000*60*60*24));
+var daysLabel=diffDays===0?'(hoje)':diffDays===1?'(ontem)':'(há '+diffDays+' dias)';
+document.getElementById('last-update-days').textContent=daysLabel;
+
 document.getElementById('footer-range').textContent=DAILY[0].date+' → '+maxD;
 
 // Year filter (table + monthly)

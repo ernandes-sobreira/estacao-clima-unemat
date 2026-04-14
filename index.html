@@ -162,7 +162,8 @@ footer a{color:var(--acc);text-decoration:none}
     <button class="nb" data-sec="correlacao">🔗 Correlação</button>
     <button class="nb" data-sec="tabela">📋 Tabela</button>
     <button class="nb" data-sec="download">⬇️ Downloads</button>
-    <button class="nb" data-sec="upload">⬆️ Atualizar <span class="badge">Admin</span></button>
+    <button class="nb" data-sec="upload">⬆️ Atualizar</button>
+    <button class="nb" data-sec="log-uploads">📋 Log de Uploads</button>
   </nav>
 </header>
 
@@ -430,8 +431,63 @@ footer a{color:var(--acc);text-decoration:none}
 <!-- UPLOAD -->
 <section id="sec-upload" class="sec">
 <div class="wrap">
+
+  <!-- GITHUB CONFIG -->
+  <div class="panel" id="github-config-panel">
+    <div class="ph"><div>
+      <div class="pt">🔧 Configuração GitHub</div>
+      <div class="ps">Configure uma vez — dados salvos no navegador</div>
+    </div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div>
+        <label style="font-size:.7rem;color:var(--tx3);display:block;margin-bottom:4px">Usuário GitHub</label>
+        <input id="gh-user" type="text" placeholder="ex: ernandes-sobreira" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:JetBrains Mono,monospace;font-size:.78rem;padding:7px 10px;border-radius:7px;outline:none">
+      </div>
+      <div>
+        <label style="font-size:.7rem;color:var(--tx3);display:block;margin-bottom:4px">Repositório</label>
+        <input id="gh-repo" type="text" placeholder="ex: estacao-clima-unemat" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:JetBrains Mono,monospace;font-size:.78rem;padding:7px 10px;border-radius:7px;outline:none">
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.7rem;color:var(--tx3);display:block;margin-bottom:4px">GitHub Personal Access Token (Fine-grained ou Classic com permissão <em>Contents: Read &amp; Write</em>)</label>
+      <div style="display:flex;gap:8px">
+        <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="flex:1;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:JetBrains Mono,monospace;font-size:.78rem;padding:7px 10px;border-radius:7px;outline:none">
+        <button onclick="toggleToken()" style="background:var(--s2);border:1px solid var(--bd);color:var(--tx3);font-family:Sora,sans-serif;font-size:.72rem;padding:7px 12px;border-radius:7px;cursor:pointer">👁</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button onclick="saveGHConfig()" style="background:var(--acc);border:none;color:#07091a;font-family:Sora,sans-serif;font-size:.75rem;font-weight:700;padding:8px 18px;border-radius:7px;cursor:pointer">💾 Salvar Configuração</button>
+      <button onclick="testGHConnection()" style="background:var(--s2);border:1px solid var(--bd);color:var(--tx2);font-family:Sora,sans-serif;font-size:.73rem;padding:7px 14px;border-radius:7px;cursor:pointer">🔌 Testar Conexão</button>
+      <span id="gh-config-status" style="font-size:.72rem;color:var(--tx3)"></span>
+    </div>
+  </div>
+
+  <!-- UPLOAD PANEL -->
   <div class="panel">
-    <div class="ph"><div><div class="pt">Atualizar Base de Dados</div><div class="ps">Upload de novo .xlsx HOBOlink · integração por dia, sem duplicar</div></div></div>
+    <div class="ph"><div>
+      <div class="pt">📤 Enviar Planilha HOBOlink</div>
+      <div class="ps">Aceita .xlsx exportado do HOBOlink RX2100 · dados agregados e salvos permanentemente no GitHub</div>
+    </div></div>
+
+    <!-- Identificação do uploader -->
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:14px;margin-bottom:14px">
+      <div style="font-size:.75rem;font-weight:600;color:var(--acc);margin-bottom:10px">👤 Identificação do Responsável pelo Upload</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label style="font-size:.68rem;color:var(--tx3);display:block;margin-bottom:3px">Nome completo *</label>
+          <input id="uploader-name" type="text" placeholder="Ex: João Silva" style="width:100%;background:var(--s1);border:1px solid var(--bd);color:var(--tx);font-family:Sora,sans-serif;font-size:.78rem;padding:6px 10px;border-radius:6px;outline:none">
+        </div>
+        <div>
+          <label style="font-size:.68rem;color:var(--tx3);display:block;margin-bottom:3px">Instituição / Função</label>
+          <input id="uploader-inst" type="text" placeholder="Ex: UNEMAT / Pesquisador" style="width:100%;background:var(--s1);border:1px solid var(--bd);color:var(--tx);font-family:Sora,sans-serif;font-size:.78rem;padding:6px 10px;border-radius:6px;outline:none">
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <label style="font-size:.68rem;color:var(--tx3);display:block;margin-bottom:3px">Observação (opcional)</label>
+        <input id="uploader-note" type="text" placeholder="Ex: Coleta de campo março 2026" style="width:100%;background:var(--s1);border:1px solid var(--bd);color:var(--tx);font-family:Sora,sans-serif;font-size:.78rem;padding:6px 10px;border-radius:6px;outline:none">
+      </div>
+    </div>
+
     <div class="dz" id="drop-zone">
       <div class="dz-ico">📂</div>
       <div class="dz-t">Arraste ou clique para enviar planilha HOBOlink</div>
@@ -439,14 +495,40 @@ footer a{color:var(--acc);text-decoration:none}
       <input type="file" id="file-input" accept=".xlsx" style="display:none">
     </div>
     <div id="upload-status"></div>
-    <div style="margin-top:18px">
-      <div class="info-box">
-        <h4>Como exportar do HOBOlink</h4>
-        1. Acesse o HOBOlink da Estação UNEMAT Pantanal Norte<br>
-        2. Selecione o período desejado<br>
-        3. Exporte em .xlsx · resolução 5 min<br>
-        4. Arraste acima — integração automática por timestamp
+
+    <!-- Progress bar -->
+    <div id="gh-progress-wrap" style="display:none;margin-top:12px">
+      <div style="font-size:.72rem;color:var(--tx3);margin-bottom:5px" id="gh-progress-label">Processando…</div>
+      <div style="background:var(--bd);border-radius:10px;height:6px;overflow:hidden">
+        <div id="gh-progress-bar" style="height:100%;width:0%;background:var(--acc);border-radius:10px;transition:width .4s ease"></div>
       </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="info-box">
+        <h4>📋 Como exportar do HOBOlink (formato correto)</h4>
+        1. Acesse o HOBOlink da Estação UNEMAT Pantanal Norte<br>
+        2. Selecione o período desejado (a partir do último dado)<br>
+        3. Exporte em <strong>.xlsx</strong> · resolução <strong>5 min</strong><br>
+        4. Preencha sua identificação acima<br>
+        5. Arraste o arquivo — os dados serão integrados e salvos permanentemente
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- LOG DE UPLOADS -->
+<section id="sec-log-uploads" class="sec">
+<div class="wrap">
+  <div class="panel">
+    <div class="ph">
+      <div><div class="pt">📋 Histórico de Uploads</div><div class="ps">Registro de todas as atualizações da base de dados</div></div>
+      <button onclick="loadUploadLog()" style="background:var(--s2);border:1px solid var(--bd);color:var(--tx2);font-family:Sora,sans-serif;font-size:.73rem;padding:6px 12px;border-radius:7px;cursor:pointer">🔄 Atualizar</button>
+    </div>
+    <div id="upload-log-table">
+      <div style="text-align:center;padding:30px;color:var(--tx3);font-size:.78rem">Clique em Atualizar para carregar o histórico</div>
     </div>
   </div>
 </div>
@@ -886,46 +968,318 @@ function dlRaw5JSON(){
   });
 }
 
+// ── GITHUB CONFIG ─────────────────────────────────────────────────────────
+function getGHConfig(){
+  return {
+    user: localStorage.getItem('gh_user')||'',
+    repo: localStorage.getItem('gh_repo')||'',
+    token: localStorage.getItem('gh_token')||''
+  };
+}
+function saveGHConfig(){
+  localStorage.setItem('gh_user', document.getElementById('gh-user').value.trim());
+  localStorage.setItem('gh_repo', document.getElementById('gh-repo').value.trim());
+  localStorage.setItem('gh_token', document.getElementById('gh-token').value.trim());
+  document.getElementById('gh-config-status').textContent='✅ Configuração salva!';
+  document.getElementById('gh-config-status').style.color='var(--acc)';
+  setTimeout(function(){document.getElementById('gh-config-status').textContent='';},3000);
+}
+function loadGHConfig(){
+  var c=getGHConfig();
+  if(c.user) document.getElementById('gh-user').value=c.user;
+  if(c.repo) document.getElementById('gh-repo').value=c.repo;
+  if(c.token) document.getElementById('gh-token').value=c.token;
+}
+function toggleToken(){
+  var t=document.getElementById('gh-token');
+  t.type=t.type==='password'?'text':'password';
+}
+function setProgress(pct,label){
+  document.getElementById('gh-progress-wrap').style.display='block';
+  document.getElementById('gh-progress-bar').style.width=pct+'%';
+  if(label) document.getElementById('gh-progress-label').textContent=label;
+}
+function hideProgress(){
+  setTimeout(function(){document.getElementById('gh-progress-wrap').style.display='none';},2000);
+}
+
+async function testGHConnection(){
+  var c=getGHConfig(); var st=document.getElementById('gh-config-status');
+  if(!c.user||!c.repo||!c.token){st.textContent='⚠️ Preencha usuário, repositório e token';st.style.color='var(--acc3)';return;}
+  st.textContent='🔄 Testando…'; st.style.color='var(--tx3)';
+  try{
+    var r=await fetch('https://api.github.com/repos/'+c.user+'/'+c.repo+'/contents/index.html',
+      {headers:{'Authorization':'token '+c.token,'Accept':'application/vnd.github.v3+json'}});
+    if(r.ok){st.textContent='✅ Conexão OK — repositório acessível!';st.style.color='var(--acc)';}
+    else{var e=await r.json();st.textContent='❌ Erro '+r.status+': '+(e.message||'');st.style.color='var(--acc4)';}
+  }catch(err){st.textContent='❌ Erro de rede: '+err.message;st.style.color='var(--acc4)';}
+}
+
+// Parse HOBOlink .xlsx (any export format) → daily aggregated records
+function parseHoboXlsx(arrayBuffer){
+  var wb=XLSX.read(new Uint8Array(arrayBuffer),{type:'array'});
+  // skip event sheets
+  var sh=wb.SheetNames.filter(function(n){return !n.toLowerCase().includes('event');})[0]||wb.SheetNames[0];
+  var raw=XLSX.utils.sheet_to_json(wb.Sheets[sh],{header:1,raw:false,defval:''});
+  // find header row — accepts 'date', 'data', 'time', 'timestamp', 'datetime'
+  var hRow=-1;
+  for(var i=0;i<Math.min(12,raw.length);i++){
+    if(raw[i]&&raw[i].some(function(c){
+      var s=String(c||'').toLowerCase();
+      return s.includes('date')||s.includes('data')||s==='time'||s.includes('timestamp')||s.includes('hora');
+    })){hRow=i;break;}
+  }
+  if(hRow<0) throw new Error('Header não encontrado — verifique se o arquivo é .xlsx do HOBOlink');
+  var hdrs=raw[hRow];
+  var rows=raw.slice(hRow+1).filter(function(r){return r&&r.length>2&&String(r[0]||r[1]||'').trim();});
+  function fi(kws){return hdrs.findIndex(function(h){return kws.some(function(k){return String(h||'').toLowerCase().includes(k);});});}
+  var di=fi(['date','data']),ti=fi(['time','hora']),
+      tmi=fi(['temperature','temp','temperatura']),
+      hi=fi(['rh','humidity','umidade']),
+      ri=fi(['rain','precipitation','chuva','precip']),
+      si=fi(['solar','radiation','radiacao','radiação','solar rad']),
+      wi=fi(['wind speed','velocidade do vento','wind spd','vento']),
+      gti=fi(['gust','rajada']),
+      dpi=fi(['dew','orvalho']),
+      pi=fi(['pressure','pressao','pressão','baro']);
+  function pv(row,idx){
+    if(idx<0||row[idx]===null||row[idx]===undefined||row[idx]==='') return null;
+    var v=parseFloat(String(row[idx]).replace(',','.'));
+    return isNaN(v)?null:v;
+  }
+  function parseDate(row){
+    var d=String(row[di]||'').trim();
+    var t=String(ti>=0?row[ti]||'':'').trim();
+    // ISO format 2024-01-15 or 01/15/24 or 15/01/2024
+    if(/^\d{4}-\d{2}-\d{2}/.test(d)) return d.slice(0,10);
+    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}/.test(d)){
+      var pts=d.split('/');
+      // Detect MM/DD/YY vs DD/MM/YYYY
+      var y=pts[2].length===2?'20'+pts[2]:pts[2];
+      var m1=parseInt(pts[0]),m2=parseInt(pts[1]);
+      if(m1>12) return y+'-'+String(m2).padStart(2,'0')+'-'+String(m1).padStart(2,'0');
+      return y+'-'+String(m1).padStart(2,'0')+'-'+String(m2).padStart(2,'0');
+    }
+    return null;
+  }
+  // Aggregate to daily
+  var byDay={};
+  rows.forEach(function(row){
+    var ds=parseDate(row); if(!ds||ds.length!==10) return;
+    if(!byDay[ds]) byDay[ds]={
+      date:ds,year:parseInt(ds.slice(0,4)),month:parseInt(ds.slice(5,7)),
+      temps:[],tmins:[],tmaxs:[],hums:[],rains:[],solars:[],winds:[],gusts:[],dews:[],pressures:[],n:0
+    };
+    var d=byDay[ds];
+    var t=pv(row,tmi),h=pv(row,hi),r=pv(row,ri),s=pv(row,si),
+        w=pv(row,wi),g=pv(row,gti),dp=pv(row,dpi),p=pv(row,pi);
+    if(t!==null){d.temps.push(t);d.tmins.push(t);d.tmaxs.push(t);}
+    if(h!==null) d.hums.push(h);
+    if(r!==null) d.rains.push(r);
+    if(s!==null) d.solars.push(s);
+    if(w!==null) d.winds.push(w);
+    if(g!==null) d.gusts.push(g);
+    if(dp!==null) d.dews.push(dp);
+    if(p!==null) d.pressures.push(p);
+    d.n++;
+  });
+  function avg(a){return a.length?a.reduce(function(s,v){return s+v;},0)/a.length:null;}
+  function mn(a){return a.length?Math.min.apply(null,a):null;}
+  function mx(a){return a.length?Math.max.apply(null,a):null;}
+  function sm(a){return a.length?a.reduce(function(s,v){return s+v;},0):null;}
+  return Object.values(byDay).map(function(d){
+    var tmean=avg(d.temps),tmin=mn(d.tmins),tmax=mx(d.tmaxs);
+    return {
+      date:d.date,year:d.year,month:d.month,
+      temp_mean:tmean!==null?Math.round(tmean*100)/100:null,
+      temp_min:tmin!==null?Math.round(tmin*100)/100:null,
+      temp_max:tmax!==null?Math.round(tmax*100)/100:null,
+      temp_amp:(tmin!==null&&tmax!==null)?Math.round((tmax-tmin)*100)/100:null,
+      humidity_mean:avg(d.hums)!==null?Math.round(avg(d.hums)*100)/100:null,
+      pressure_mean:avg(d.pressures)!==null?Math.round(avg(d.pressures)*100)/100:null,
+      rain_total:sm(d.rains)!==null?Math.round(sm(d.rains)*100)/100:null,
+      solar_mean:avg(d.solars)!==null?Math.round(avg(d.solars)*100)/100:null,
+      solar_max:mx(d.solars)!==null?Math.round(mx(d.solars)*100)/100:null,
+      wind_mean:avg(d.winds)!==null?Math.round(avg(d.winds)*1000)/1000:null,
+      wind_max:mx(d.gusts)!==null?Math.round(mx(d.gusts)*100)/100:null,
+      dew_point_mean:avg(d.dews)!==null?Math.round(avg(d.dews)*100)/100:null,
+      n_obs:d.n
+    };
+  }).sort(function(a,b){return a.date.localeCompare(b.date);});
+}
+
+async function ghGetFile(path){
+  var c=getGHConfig();
+  var r=await fetch('https://api.github.com/repos/'+c.user+'/'+c.repo+'/contents/'+path,
+    {headers:{'Authorization':'token '+c.token,'Accept':'application/vnd.github.v3+json'}});
+  if(!r.ok) return null;
+  return r.json();
+}
+async function ghPutFile(path, content_b64, message, sha){
+  var c=getGHConfig();
+  var body={message:message,content:content_b64};
+  if(sha) body.sha=sha;
+  var r=await fetch('https://api.github.com/repos/'+c.user+'/'+c.repo+'/contents/'+path,{
+    method:'PUT',
+    headers:{'Authorization':'token '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  return r;
+}
+function b64enc(str){
+  // encode UTF8 string to base64
+  var bytes=new TextEncoder().encode(str);
+  var binary=''; bytes.forEach(function(b){binary+=String.fromCharCode(b);});
+  return btoa(binary);
+}
+function b64dec(b64){
+  var binary=atob(b64.replace(/\n/g,''));
+  var bytes=new Uint8Array(binary.length);
+  for(var i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+async function saveToGitHub(newRecords, fileName, uploaderName, uploaderInst, uploaderNote){
+  var c=getGHConfig();
+  if(!c.user||!c.repo||!c.token) throw new Error('Configure o GitHub primeiro (aba Configuração)');
+  setProgress(10,'📥 Buscando index.html do GitHub…');
+  var indexFile=await ghGetFile('index.html');
+  if(!indexFile) throw new Error('index.html não encontrado no repositório');
+  var currentHtml=b64dec(indexFile.content);
+  setProgress(25,'🔍 Extraindo dados existentes…');
+  // Extract current DAILY JSON
+  var match=currentHtml.match(/var DAILY = (\[[\s\S]*?\]);\n/);
+  if(!match) throw new Error('Bloco var DAILY não encontrado no index.html');
+  var existingDaily=JSON.parse(match[1]);
+  var existSet=new Set(existingDaily.map(function(d){return d.date;}));
+  var added=newRecords.filter(function(r){return !existSet.has(r.date);});
+  if(added.length===0) return {added:0,total:existingDaily.length};
+  var merged=existingDaily.concat(added).sort(function(a,b){return a.date.localeCompare(b.date);});
+  setProgress(50,'✏️ Atualizando HTML…');
+  var newDailyStr='var DAILY = '+JSON.stringify(merged)+';\n';
+  var newHtml=currentHtml.replace(/var DAILY = \[[\s\S]*?\];\n/, newDailyStr);
+  // Update header stats
+  newHtml=newHtml.replace(/<strong>\d[\d\.]+<\/strong>\n    <\/div>\n    <div class="sp">Dias/,
+    '<strong>'+merged.reduce(function(s,d){return s+(d.n_obs||0);},0).toLocaleString('pt-BR')+'<\/strong>\n    <\/div>\n    <div class="sp">Dias');
+  newHtml=newHtml.replace(/Dias <strong>\d[\d,\.]+<\/strong>/,
+    'Dias <strong>'+merged.length+'<\/strong>');
+  // Update subtitle date range
+  var firstD=merged[0].date.slice(0,7).replace('-','/');
+  var lastD=merged[merged.length-1].date.slice(0,7).replace('-','/');
+  newHtml=newHtml.replace(/Out\/\d{4} → \w{3}\/\d{4}/,
+    'Out/2020 → '+merged[merged.length-1].date.slice(0,3).replace(/(\d{4})-(\d{2})/,'').replace('',''));
+  setProgress(70,'🚀 Enviando index.html para GitHub…');
+  var now=new Date().toISOString();
+  var commitMsg='📊 Atualização automática: +'+added.length+' dias — '+now.slice(0,10)+' — por '+uploaderName;
+  var r=await ghPutFile('index.html', b64enc(newHtml), commitMsg, indexFile.sha);
+  if(!r.ok){var e=await r.json();throw new Error('GitHub recusou: '+(e.message||r.status));}
+  setProgress(85,'📋 Salvando log de upload…');
+  // Update upload log
+  var logEntry={
+    timestamp:now,
+    uploader_name:uploaderName,
+    uploader_inst:uploaderInst||'',
+    uploader_note:uploaderNote||'',
+    file_name:fileName,
+    days_added:added.length,
+    total_days:merged.length,
+    first_new_date:added.length?added[0].date:'',
+    last_new_date:added.length?added[added.length-1].date:''
+  };
+  var logFile=await ghGetFile('upload_log.json');
+  var logData=[];
+  if(logFile) try{logData=JSON.parse(b64dec(logFile.content));}catch(e){}
+  logData.unshift(logEntry);
+  var logR=await ghPutFile('upload_log.json', b64enc(JSON.stringify(logData,null,2)),
+    '📋 Log: upload por '+uploaderName+' — '+now.slice(0,10), logFile?logFile.sha:null);
+  setProgress(100,'✅ Concluído!');
+  hideProgress();
+  return {added:added.length, total:merged.length};
+}
+
+async function loadUploadLog(){
+  var c=getGHConfig();
+  var el=document.getElementById('upload-log-table');
+  if(!c.user||!c.repo){
+    el.innerHTML='<div style="padding:20px;color:var(--acc3);font-size:.78rem">⚠️ Configure o GitHub na aba Atualizar primeiro.</div>';
+    return;
+  }
+  el.innerHTML='<div style="padding:20px;color:var(--tx3);font-size:.78rem">🔄 Carregando…</div>';
+  var logFile=await ghGetFile('upload_log.json');
+  if(!logFile){
+    el.innerHTML='<div style="padding:20px;color:var(--tx3);font-size:.78rem">Nenhum upload registrado ainda.</div>';
+    return;
+  }
+  var log=[];
+  try{log=JSON.parse(b64dec(logFile.content));}catch(e){
+    el.innerHTML='<div style="padding:20px;color:var(--acc4);font-size:.78rem">Erro ao parsear log.</div>';return;
+  }
+  var html='<div class="tw"><table><thead><tr>'+
+    '<th>Data/Hora</th><th>Responsável</th><th>Instituição</th><th>Arquivo</th>'+
+    '<th>Dias+</th><th>Total Dias</th><th>1º Novo</th><th>Último Novo</th><th>Observação</th>'+
+    '</tr></thead><tbody>';
+  log.forEach(function(e){
+    var dt=e.timestamp?new Date(e.timestamp).toLocaleString('pt-BR'):'—';
+    html+='<tr>'+
+      '<td>'+dt+'</td>'+
+      '<td style="color:var(--acc);font-family:Sora,sans-serif">'+escHtml(e.uploader_name||'—')+'</td>'+
+      '<td>'+escHtml(e.uploader_inst||'—')+'</td>'+
+      '<td style="font-size:.65rem">'+escHtml(e.file_name||'—')+'</td>'+
+      '<td style="color:var(--acc)">+'+e.days_added+'</td>'+
+      '<td>'+e.total_days+'</td>'+
+      '<td>'+escHtml(e.first_new_date||'—')+'</td>'+
+      '<td>'+escHtml(e.last_new_date||'—')+'</td>'+
+      '<td style="font-size:.65rem;color:var(--tx3)">'+escHtml(e.uploader_note||'')+'</td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  el.innerHTML=html;
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
 function processFile(file){
   if(!file) return;
   var st=document.getElementById('upload-status');
-  st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">Processando…</span></div>';
+  var uploaderName=document.getElementById('uploader-name').value.trim();
+  if(!uploaderName){
+    st.innerHTML='<div class="ui"><span style="color:var(--acc3)">⚠️ Preencha seu nome antes de enviar</span></div>';
+    return;
+  }
+  var uploaderInst=document.getElementById('uploader-inst').value.trim();
+  var uploaderNote=document.getElementById('uploader-note').value.trim();
+  st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">🔄 Processando…</span></div>';
   function parse(){
     var reader=new FileReader();
     reader.onload=function(e){
       try{
-        var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-        var sh=wb.SheetNames.filter(function(n){return !n.toLowerCase().includes('event');})[0]||wb.SheetNames[0];
-        var raw=XLSX.utils.sheet_to_json(wb.Sheets[sh],{header:1,raw:false});
-        var hRow=-1;
-        for(var i=0;i<Math.min(8,raw.length);i++){
-          if(raw[i]&&raw[i].some(function(c){return String(c||'').toLowerCase().includes('date');})){hRow=i;break;}
+        var newRecords=parseHoboXlsx(e.target.result);
+        if(!newRecords.length) throw new Error('Nenhum registro válido encontrado no arquivo');
+        st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">🔄 '+newRecords.length+' dias lidos — salvando no GitHub…</span></div>';
+        var c=getGHConfig();
+        if(!c.user||!c.repo||!c.token){
+          // Fallback: só atualiza memória local
+          var existSet=new Set(DAILY.map(function(d){return d.date;}));
+          var added=newRecords.filter(function(r){return !existSet.has(r.date);});
+          added.forEach(function(r){DAILY.push(r);});
+          DAILY.sort(function(a,b){return a.date.localeCompare(b.date);});
+          st.innerHTML='<div class="ui"><span>✅ '+file.name+'</span><span class="ok">'+added.length+' dias novos (apenas sessão — configure GitHub para salvar permanentemente)</span></div>';
+          renderOverview(); renderTable(); return;
         }
-        if(hRow<0){st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">⚠️ Header não encontrado</span></div>';return;}
-        var hdrs=raw[hRow];
-        var rows=raw.slice(hRow+1).filter(function(r){return r&&r.length>2&&r[1];});
-        function fi(kws){return hdrs.findIndex(function(h){return kws.some(function(k){return String(h||'').toLowerCase().includes(k);});});}
-        var di=fi(['date']),ti=fi(['time']),tmi=fi(['temperature']),hi=fi(['rh','humidity']),
-            ri=fi(['rain']),si=fi(['solar','radiation']),wi=fi(['wind speed']),gti=fi(['gust']),
-            wdi=fi(['direction']),dpi=fi(['dew']),pi=fi(['pressure']),bati=fi(['batt','volt']);
-        var added=0;
-        var existDates=new Set(DAILY.map(function(d){return d.date;}));
-        rows.forEach(function(row){
-          if(!row[di]) return;
-          var ds=String(row[di]).replace(/(\d+)\/(\d+)\/(\d+)/,function(m,a,b,c){return '20'+c+'-'+a.padStart(2,'0')+'-'+b.padStart(2,'0');}).slice(0,10);
-          if(existDates.has(ds)) return;
-          function pv(idx){return idx>=0&&row[idx]!=null&&row[idx]!==''?parseFloat(String(row[idx]).replace(',','.')):null;}
-          DAILY.push({date:ds,year:parseInt(ds.slice(0,4)),month:parseInt(ds.slice(5,7)),
-            temp_mean:pv(tmi),temp_min:pv(tmi),temp_max:pv(tmi),temp_amp:null,
-            humidity_mean:pv(hi),pressure_mean:pv(pi),rain_total:pv(ri),
-            solar_mean:pv(si),solar_max:pv(si),wind_mean:pv(wi),wind_max:pv(gti),
-            dew_point_mean:pv(dpi),n_obs:1});
-          existDates.add(ds); added++;
+        saveToGitHub(newRecords, file.name, uploaderName, uploaderInst, uploaderNote).then(function(res){
+          // also update local DAILY in memory
+          var existSet=new Set(DAILY.map(function(d){return d.date;}));
+          newRecords.forEach(function(r){if(!existSet.has(r.date)){DAILY.push(r);}});
+          DAILY.sort(function(a,b){return a.date.localeCompare(b.date);});
+          st.innerHTML='<div class="ui"><span>✅ '+file.name+'</span><span class="ok">+'+res.added+' dias novos · total: '+res.total+' · GitHub atualizado! 🎉</span></div>';
+          renderOverview(); renderTable();
+          showToast('✅ '+res.added+' dias adicionados e salvos no GitHub!');
+        }).catch(function(err){
+          st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">⚠️ GitHub: '+err.message+'</span></div>';
+          hideProgress();
         });
-        DAILY.sort(function(a,b){return a.date.localeCompare(b.date);});
-        st.innerHTML='<div class="ui"><span>✅ '+file.name+'</span><span class="ok">'+added+' dias novos · total: '+DAILY.length+'</span></div>';
-        renderOverview(); renderTable();
-      }catch(err){st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">⚠️ '+err.message+'</span></div>';}
+      }catch(err){
+        st.innerHTML='<div class="ui"><span>'+file.name+'</span><span class="wa">⚠️ '+err.message+'</span></div>';
+      }
     };
     reader.readAsArrayBuffer(file);
   }
@@ -1002,6 +1356,7 @@ document.getElementById('dl-raw5-csv').addEventListener('click',dlRaw5CSV);
 document.getElementById('dl-raw5-json').addEventListener('click',dlRaw5JSON);
 
 // UPLOAD
+loadGHConfig();
 var dz=document.getElementById('drop-zone'),fi=document.getElementById('file-input');
 dz.addEventListener('click',function(){fi.click();});
 fi.addEventListener('change',function(e){processFile(e.target.files[0]);});

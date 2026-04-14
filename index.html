@@ -1580,81 +1580,82 @@ async function loadUploadLog(){
 // ═══════════════════════════════════════════ INIT (async)
 async function initApp(){
   var overlay=document.getElementById('loading-overlay');
-  try {
-    await loadDaily();
-  } catch(e){ return; }
 
-  // Hide overlay
+  // Always render immediately with embedded data
   if(overlay) overlay.style.display='none';
+  _dailyLoaded=true;
+  renderUI();
 
+  // Then try to fetch daily.json for newer data (silently)
+  try{
+    var base=location.href.replace(/\/[^\/]*$/,'/');
+    var r=await fetch(base+'daily.json?v='+Date.now());
+    if(r.ok){
+      var remote=await r.json();
+      if(remote.length>DAILY.length){
+        DAILY=remote;
+        renderUI();
+      }
+    }
+  }catch(e){ /* silently ignore — already showing embedded data */ }
+}
+
+function renderUI(){
   var maxD=DAILY[DAILY.length-1].date;
   var minD=DAILY[0].date;
   var d1y=new Date(maxD);d1y.setFullYear(d1y.getFullYear()-1);
-  var d1ys=d1y.toISOString().slice(0,10);
-  document.getElementById('exp-from').value=d1ys;
+  document.getElementById('exp-from').value=d1y.toISOString().slice(0,10);
   document.getElementById('exp-to').value=maxD;
   document.getElementById('stat-from').value=minD;
   document.getElementById('stat-to').value=maxD;
-
-  // Header stats
   var totalObs=DAILY.reduce(function(s,d){return s+(d.n_obs||0);},0);
   document.getElementById('hdr-obs').textContent=totalObs.toLocaleString('pt-BR');
   document.getElementById('hdr-dias').textContent=DAILY.length.toLocaleString('pt-BR');
-
-  // Dynamic period in subtitle
-  var startMon=minD.slice(0,7).replace('-','/');
-  var endMon=maxD.slice(0,7).replace('-','/');
-  document.getElementById('hdr-period-sub').textContent=startMon+' → '+endMon;
-
-  // Last update banner
+  document.getElementById('hdr-period-sub').textContent=minD.slice(0,7).replace('-','/')+' → '+maxD.slice(0,7).replace('-','/');
   var parts=maxD.split('-');
   document.getElementById('last-update-date').textContent=parts[2]+'/'+parts[1]+'/'+parts[0];
-  var today=new Date();
-  var lastD=new Date(maxD+'T12:00:00');
-  var diffDays=Math.floor((today-lastD)/(1000*60*60*24));
-  var daysLabel=diffDays===0?'(hoje)':diffDays===1?'(ontem)':'(há '+diffDays+' dias)';
-  document.getElementById('last-update-days').textContent=daysLabel;
+  var diffDays=Math.floor((new Date()-new Date(maxD+'T12:00:00'))/(1000*60*60*24));
+  document.getElementById('last-update-days').textContent=diffDays===0?'(hoje)':diffDays===1?'(ontem)':'(há '+diffDays+' dias)';
   document.getElementById('footer-range').textContent=minD+' → '+maxD;
-
-  // Year filter (table + monthly)
+  // Rebuild year selectors
+  var sel1=document.getElementById('tab-year');
+  var sel2=document.getElementById('mon-year');
+  sel1.innerHTML='<option value="all">Todos</option>';
+  sel2.innerHTML='<option value="all">Todos os anos</option>';
   var years=[...new Set(DAILY.map(function(d){return d.year;}))].sort();
   years.forEach(function(y){
-    var o1=document.createElement('option');o1.value=y;o1.textContent=y;document.getElementById('tab-year').appendChild(o1);
-    var o2=document.createElement('option');o2.value=y;o2.textContent=y;document.getElementById('mon-year').appendChild(o2);
+    var o1=document.createElement('option');o1.value=y;o1.textContent=y;sel1.appendChild(o1);
+    var o2=document.createElement('option');o2.value=y;o2.textContent=y;sel2.appendChild(o2);
   });
-
-  // Nav
-  document.querySelectorAll('.nb').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var sec=this.dataset.sec;
-      document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('active');});
-      document.getElementById('sec-'+sec).classList.add('active');
-      document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
-      this.classList.add('active');
-      if(sec==='explorer')renderExplorer();
-      if(sec==='estatisticas')renderStats();
-      if(sec==='mensal')renderMonthly();
-      if(sec==='anual')renderAnnual();
-      if(sec==='queimadas')renderQueimadas();
-      if(sec==='tabela')renderTable();
-      if(sec==='log')loadUploadLog();
-    });
-  });
-
-  // Explorer listeners
-  ['exp-var','exp-from','exp-to','exp-fire','exp-smooth'].forEach(function(id){
-    var el=document.getElementById(id);
-    el.addEventListener('change',renderExplorer);
-  });
-  ['mon-var','mon-year','mon-type','mon-fire'].forEach(function(id){
-    document.getElementById(id).addEventListener('change',renderMonthly);
-  });
-  document.getElementById('ann-var').addEventListener('change',renderAnnual);
-  document.getElementById('fire-var').addEventListener('change',renderQueimadas);
-  ['tab-year','tab-month'].forEach(function(id){document.getElementById(id).addEventListener('change',renderTable);});
-
   renderOverview();
 }
+
+// Register nav and listeners once
+document.querySelectorAll('.nb').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var sec=this.dataset.sec;
+    document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('active');});
+    document.getElementById('sec-'+sec).classList.add('active');
+    document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
+    this.classList.add('active');
+    if(sec==='explorer')renderExplorer();
+    if(sec==='estatisticas')renderStats();
+    if(sec==='mensal')renderMonthly();
+    if(sec==='anual')renderAnnual();
+    if(sec==='queimadas')renderQueimadas();
+    if(sec==='tabela')renderTable();
+    if(sec==='log')loadUploadLog();
+  });
+});
+['exp-var','exp-from','exp-to','exp-fire','exp-smooth'].forEach(function(id){
+  document.getElementById(id).addEventListener('change',renderExplorer);
+});
+['mon-var','mon-year','mon-type','mon-fire'].forEach(function(id){
+  document.getElementById(id).addEventListener('change',renderMonthly);
+});
+document.getElementById('ann-var').addEventListener('change',renderAnnual);
+document.getElementById('fire-var').addEventListener('change',renderQueimadas);
+['tab-year','tab-month'].forEach(function(id){document.getElementById(id).addEventListener('change',renderTable);});
 
 // ═══════════════════════════════════════════ SENHA UPLOAD
 function verificarSenha(){

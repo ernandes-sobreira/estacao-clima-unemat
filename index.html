@@ -8,21 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#ffffff;--bg2:#f8f9fb;--bg3:#f1f3f7;
-  --bd:#e2e6ed;--bd2:#d0d6e0;
-  --tx:#1a2035;--tx2:#4a5568;--tx3:#8492a6;
-  --acc:#1d5fa6;--acc2:#2b8a3e;--acc3:#e67700;--acc4:#c92a2a;
-  --acc-lt:#e8f0fb;--acc2-lt:#ebfbee;--acc3-lt:#fff4e6;--acc4-lt:#fff5f5;
-  --fire1:rgba(255,87,34,.13);--fire2:rgba(255,87,34,.07);
-  --r:8px;--shadow:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
-  --shadow-md:0 2px 8px rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.06);
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;
+  --bd:#1e2d45;--bd2:#253352;
+  --tx:#e8edf5;--tx2:#94a3b8;--tx3:#546278;
+  --acc:#38bdf8;--acc2:#34d399;--acc3:#fb923c;--acc4:#f87171;
+  --acc-lt:rgba(56,189,248,.08);--acc2-lt:rgba(52,211,153,.08);--acc3-lt:rgba(251,146,60,.08);--acc4-lt:rgba(248,113,113,.08);
+  --fire1:rgba(255,120,30,.15);--fire2:rgba(255,120,30,.07);
+  --r:8px;--shadow:0 1px 4px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  --shadow-md:0 2px 8px rgba(0,0,0,.35),0 8px 32px rgba(0,0,0,.3);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:15px}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh}
 /* ── HEADER ── */
 .hdr{
-  background:#fff;border-bottom:1.5px solid var(--bd);
+  background:var(--bg2);border-bottom:1.5px solid var(--bd);
   padding:0 32px;display:flex;align-items:center;
   justify-content:space-between;gap:16px;flex-wrap:wrap;
   position:sticky;top:0;z-index:200;min-height:58px;
@@ -37,7 +37,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
   padding:3px 11px;font-size:.65rem;color:var(--tx3);white-space:nowrap}
 .chip strong{color:var(--acc);font-family:'DM Mono',monospace;font-weight:500}
 /* ── NAV ── */
-.nav{background:#fff;border-bottom:1.5px solid var(--bd);
+.nav{background:var(--bg2);border-bottom:1.5px solid var(--bd);
   padding:0 32px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nb{background:none;border:none;border-bottom:2.5px solid transparent;
@@ -50,7 +50,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 .sec{display:none}.sec.active{display:block}
 /* ── CARDS ROW ── */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:24px}
-.kpi{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+.kpi{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);
   padding:16px 18px;box-shadow:var(--shadow);transition:box-shadow .2s}
 .kpi:hover{box-shadow:var(--shadow-md)}
 .kpi-lbl{font-size:.63rem;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:6px;font-weight:600}
@@ -60,7 +60,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 .kpi-bar{height:3px;border-radius:2px;margin-top:9px;background:var(--bg3)}
 .kpi-bar-fill{height:100%;border-radius:2px;transition:width .8s ease}
 /* ── PANELS ── */
-.panel{background:#fff;border:1.5px solid var(--bd);border-radius:var(--r);
+.panel{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);
   padding:22px 24px;margin-bottom:20px;box-shadow:var(--shadow)}
 .panel-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--tx);margin-bottom:4px}
 .panel-sub{font-size:.7rem;color:var(--tx3);margin-bottom:16px}
@@ -69,20 +69,20 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 @media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
 /* ── CONTROLS ── */
 .ctrl-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px;
-  background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--r);padding:12px 16px}
+  background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--r);padding:12px 16px}
 .ctrl-label{font-size:.68rem;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
 select,input[type=date],input[type=text]{
-  background:#fff;border:1.5px solid var(--bd);color:var(--tx);
+  background:var(--bg3);border:1.5px solid var(--bd);color:var(--tx);
   font-family:'DM Sans',sans-serif;font-size:.8rem;
   padding:6px 10px;border-radius:6px;cursor:pointer;outline:none;
   transition:border-color .15s}
 select:focus,input:focus{border-color:var(--acc)}
-.btn{background:#fff;border:1.5px solid var(--bd);color:var(--tx2);
+.btn{background:var(--bg3);border:1.5px solid var(--bd);color:var(--tx2);
   font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;
   padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt)}
-.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
-.btn.primary:hover{background:#1750a0}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#0a0e1a}
+.btn.primary:hover{background:#7dd3fc}
 /* ── TOGGLE SWITCH ── */
 .toggle-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
 .toggle{position:relative;width:36px;height:20px}
@@ -103,13 +103,13 @@ select:focus,input:focus{border-color:var(--acc)}
 .h220{height:220px}.h260{height:260px}.h300{height:300px}.h340{height:340px}.h380{height:380px}
 /* ── STATS TABLE ── */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
-.stat-cell{background:var(--bg2);border:1.5px solid var(--bd);border-radius:6px;padding:12px 14px}
+.stat-cell{background:var(--bg3);border:1.5px solid var(--bd);border-radius:6px;padding:12px 14px}
 .stat-cell .sl{font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);font-weight:600;margin-bottom:3px}
 .stat-cell .sv{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:500;color:var(--tx)}
 .stat-cell .su{font-size:.62rem;color:var(--tx3)}
-.stat-cell.hi{border-color:#ffa94d;background:#fff9f0}
-.stat-cell.lo{border-color:#74c0fc;background:#f0f8ff}
-.stat-cell.avg{border-color:#a9e34b;background:#f6fff0}
+.stat-cell.hi{border-color:#fb923c;background:rgba(251,146,60,.08)}
+.stat-cell.lo{border-color:#38bdf8;background:rgba(56,189,248,.08)}
+.stat-cell.avg{border-color:#34d399;background:rgba(52,211,153,.08)}
 /* ── TABLE ── */
 .tw{overflow-x:auto;max-height:520px;overflow-y:auto;border-radius:6px;border:1.5px solid var(--bd)}
 table{width:100%;border-collapse:collapse;font-size:.73rem}
@@ -120,14 +120,14 @@ td{padding:7px 11px;border-bottom:1px solid var(--bd);color:var(--tx2);
   font-family:'DM Mono',monospace;font-size:.72rem;white-space:nowrap}
 td:first-child{color:var(--acc);font-family:'DM Sans',sans-serif;font-weight:500}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg2)}
+tr:hover td{background:var(--bg3)}
 /* ── PERIOD BAND INFO ── */
-.period-info{background:var(--acc3-lt);border:1.5px solid #f59f00;border-radius:6px;
-  padding:10px 14px;font-size:.72rem;color:#7c4a00;line-height:1.7;margin-bottom:14px}
-.period-info strong{color:#c05500}
+.period-info{background:rgba(251,146,60,.08);border:1.5px solid #fb923c;border-radius:6px;
+  padding:10px 14px;font-size:.72rem;color:#fdba74;line-height:1.7;margin-bottom:14px}
+.period-info strong{color:#fb923c}
 /* ── UPLOAD SECTION ── */
 .dz{border:2px dashed var(--bd2);border-radius:var(--r);padding:36px;
-  text-align:center;cursor:pointer;transition:all .2s;background:var(--bg2)}
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3)}
 .dz:hover,.dz.drag{border-color:var(--acc);background:var(--acc-lt)}
 .dz-ico{font-size:2rem;margin-bottom:8px}
 .dz-t{font-size:.88rem;font-weight:600;color:var(--tx);margin-bottom:4px}
@@ -193,7 +193,7 @@ footer{border-top:1.5px solid var(--bd);padding:14px 32px;
     </div>
     <div class="panel">
       <div class="panel-title">Precipitação (mm)</div>
-      <div class="panel-sub">Total diário</div>
+      <div class="panel-sub">Soma mensal</div>
       <div class="chart-wrap h300"><canvas id="ch-rain"></canvas></div>
     </div>
   </div>
@@ -510,18 +510,18 @@ var DAILY = [{"date":"2020-10-11","year":2020,"month":10,"temp_mean":25.4,"temp_
 
 // ═══════════════════════════════════════════ CONSTANTS
 var VARS={
-  temp_mean:{label:'Temperatura Média',unit:'°C',color:'#e03131',bg:'rgba(224,49,49,.12)'},
-  temp_min:{label:'Temperatura Mínima',unit:'°C',color:'#1971c2',bg:'rgba(25,113,194,.12)'},
-  temp_max:{label:'Temperatura Máxima',unit:'°C',color:'#d9480f',bg:'rgba(217,72,15,.12)'},
-  temp_amp:{label:'Amplitude Térmica',unit:'°C',color:'#7950f2',bg:'rgba(121,80,242,.12)'},
-  humidity_mean:{label:'Umidade Relativa',unit:'%',color:'#0c8599',bg:'rgba(12,133,153,.12)'},
-  pressure_mean:{label:'Pressão Atmosférica',unit:'hPa',color:'#5c7cfa',bg:'rgba(92,124,250,.12)'},
-  rain_total:{label:'Precipitação',unit:'mm',color:'#1971c2',bg:'rgba(25,113,194,.18)'},
-  solar_mean:{label:'Radiação Solar Média',unit:'W/m²',color:'#f59f00',bg:'rgba(245,159,0,.12)'},
-  solar_max:{label:'Radiação Solar Máx',unit:'W/m²',color:'#e67700',bg:'rgba(230,119,0,.12)'},
-  wind_mean:{label:'Vento Médio',unit:'m/s',color:'#37b24d',bg:'rgba(55,178,77,.12)'},
-  wind_max:{label:'Rajada Máxima',unit:'m/s',color:'#2f9e44',bg:'rgba(47,158,68,.12)'},
-  dew_point_mean:{label:'Ponto de Orvalho',unit:'°C',color:'#74c0fc',bg:'rgba(116,192,252,.12)'}
+  temp_mean:{label:'Temperatura Média',unit:'°C',color:'#f87171',bg:'rgba(248,113,113,.12)'},
+  temp_min:{label:'Temperatura Mínima',unit:'°C',color:'#38bdf8',bg:'rgba(56,189,248,.12)'},
+  temp_max:{label:'Temperatura Máxima',unit:'°C',color:'#fb923c',bg:'rgba(251,146,60,.12)'},
+  temp_amp:{label:'Amplitude Térmica',unit:'°C',color:'#a78bfa',bg:'rgba(167,139,250,.12)'},
+  humidity_mean:{label:'Umidade Relativa',unit:'%',color:'#22d3ee',bg:'rgba(34,211,238,.12)'},
+  pressure_mean:{label:'Pressão Atmosférica',unit:'hPa',color:'#818cf8',bg:'rgba(129,140,248,.12)'},
+  rain_total:{label:'Precipitação',unit:'mm',color:'#60a5fa',bg:'rgba(96,165,250,.18)'},
+  solar_mean:{label:'Radiação Solar Média',unit:'W/m²',color:'#fbbf24',bg:'rgba(251,191,36,.12)'},
+  solar_max:{label:'Radiação Solar Máx',unit:'W/m²',color:'#f59e0b',bg:'rgba(245,158,11,.12)'},
+  wind_mean:{label:'Vento Médio',unit:'m/s',color:'#34d399',bg:'rgba(52,211,153,.12)'},
+  wind_max:{label:'Rajada Máxima',unit:'m/s',color:'#10b981',bg:'rgba(16,185,129,.12)'},
+  dew_point_mean:{label:'Ponto de Orvalho',unit:'°C',color:'#67e8f9',bg:'rgba(103,232,249,.12)'}
 };
 var MON_NAMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 // Periodo proibitivo MT: junho (6) a setembro (9)
@@ -557,12 +557,12 @@ function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 // ═══════════════════════════════════════════ CHART DEFAULTS
 Chart.defaults.font.family="'DM Sans',sans-serif";
-Chart.defaults.color='#8492a6';
-var GR={color:'rgba(0,0,0,.05)'};
-var TK={color:'#8492a6',font:{size:10}};
+Chart.defaults.color='#94a3b8';
+var GR={color:'rgba(255,255,255,.05)'};
+var TK={color:'#546278',font:{size:10}};
 var TT={
-  backgroundColor:'rgba(26,32,53,.92)',
-  titleColor:'#fff',bodyColor:'#d0d6e0',
+  backgroundColor:'rgba(10,14,26,.95)',
+  titleColor:'#e8edf5',bodyColor:'#94a3b8',
   padding:10,cornerRadius:6,
   titleFont:{family:"'DM Mono',monospace",size:11},
   bodyFont:{size:11}
@@ -625,18 +625,18 @@ function lineCfg(labels,datasets,yTitle,opts){
   opts=opts||{};
   return{type:'line',data:{labels:labels,datasets:datasets},
     options:Object.assign({responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:datasets.length>1,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT},
+      plugins:{legend:{display:datasets.length>1,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT},
       scales:{x:{grid:GR,ticks:Object.assign({},TK,{maxTicksLimit:10})},
-              y:{grid:GR,ticks:TK,title:{display:!!yTitle,text:yTitle||'',color:'#8492a6',font:{size:10}}}}
+              y:{grid:GR,ticks:TK,title:{display:!!yTitle,text:yTitle||'',color:TK.color,font:{size:10}}}}
     },opts)};
 }
 function barCfg(labels,datasets,yTitle,opts){
   opts=opts||{};
   return{type:'bar',data:{labels:labels,datasets:datasets},
     options:Object.assign({responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:datasets.length>1,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT},
+      plugins:{legend:{display:datasets.length>1,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT},
       scales:{x:{grid:GR,ticks:Object.assign({},TK,{maxTicksLimit:16})},
-              y:{grid:GR,ticks:TK,title:{display:!!yTitle,text:yTitle||'',color:'#8492a6',font:{size:10}}}}
+              y:{grid:GR,ticks:TK,title:{display:!!yTitle,text:yTitle||'',color:TK.color,font:{size:10}}}}
     },opts)};
 }
 
@@ -666,21 +666,35 @@ function renderOverview(){
   }).join('');
   // Charts
   mkChart('ch-temp',lineCfg(lbls,[
-    {label:'Mín',data:d.map(function(r){return r.temp_min;}),borderColor:'#74c0fc',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:.3},
-    {label:'Média',data:d.map(function(r){return r.temp_mean;}),borderColor:'#e03131',backgroundColor:'rgba(224,49,49,.08)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3},
-    {label:'Máx',data:d.map(function(r){return r.temp_max;}),borderColor:'#ffa94d',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:.3}
+    {label:'Mín',data:d.map(function(r){return r.temp_min;}),borderColor:'#38bdf8',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:.3},
+    {label:'Média',data:d.map(function(r){return r.temp_mean;}),borderColor:'#f87171',backgroundColor:'rgba(248,113,113,.08)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3},
+    {label:'Máx',data:d.map(function(r){return r.temp_max;}),borderColor:'#fb923c',backgroundColor:'transparent',borderWidth:1,pointRadius:0,tension:.3}
   ],'°C'));
-  mkChart('ch-rain',barCfg(lbls,[
-    {label:'Chuva',data:d.map(function(r){return r.rain_total;}),backgroundColor:'rgba(25,113,194,.55)',borderWidth:0}
+  // Monthly rain sums for overview
+  var rainByMon={};
+  d.forEach(function(r){
+    if(r.rain_total==null) return;
+    var k=r.date.slice(0,7);
+    if(!rainByMon[k]) rainByMon[k]=0;
+    rainByMon[k]+=r.rain_total;
+  });
+  var rainMonKeys=Object.keys(rainByMon).sort();
+  var rainMonVals=rainMonKeys.map(function(k){return +rainByMon[k].toFixed(1);});
+  var rainMonColors=rainMonKeys.map(function(k){
+    var m=parseInt(k.slice(5,7));
+    return FIRE_MONTHS.indexOf(m)>=0?'rgba(255,120,0,.65)':'rgba(96,165,250,.6)';
+  });
+  mkChart('ch-rain',barCfg(rainMonKeys,[
+    {label:'Total mensal',data:rainMonVals,backgroundColor:rainMonColors,borderWidth:0}
   ],'mm'));
   mkChart('ch-hum',lineCfg(lbls,[
-    {data:d.map(function(r){return r.humidity_mean;}),borderColor:'#0c8599',backgroundColor:'rgba(12,133,153,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
+    {data:d.map(function(r){return r.humidity_mean;}),borderColor:'#22d3ee',backgroundColor:'rgba(34,211,238,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
   ],'%'));
   mkChart('ch-solar',lineCfg(lbls,[
-    {data:d.map(function(r){return r.solar_mean;}),borderColor:'#f59f00',backgroundColor:'rgba(245,159,0,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
+    {data:d.map(function(r){return r.solar_mean;}),borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
   ],'W/m²'));
   mkChart('ch-wind',lineCfg(lbls,[
-    {data:d.map(function(r){return r.wind_mean;}),borderColor:'#37b24d',backgroundColor:'rgba(55,178,77,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
+    {data:d.map(function(r){return r.wind_mean;}),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.09)',borderWidth:1.5,pointRadius:0,fill:true,tension:.3}
   ],'m/s'));
 }
 
@@ -718,13 +732,36 @@ function renderExplorer(){
   var vv=vals.filter(function(v){return v!=null;});
   var mn=minV(vv),mx=maxV(vv),me=avg(vv),sm=smm(vv);
   var mnD=d[vals.indexOf(mn)],mxD=d[vals.indexOf(mx)];
-  document.getElementById('exp-stats').innerHTML=
-    '<div class="stat-cell avg"><div class="sl">Média</div><div class="sv">'+fmt(me)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-    '<div class="stat-cell lo"><div class="sl">Mínima</div><div class="sv">'+fmt(mn)+'</div><div class="su">'+(mnD?mnD.date:'')+'</div></div>'+
-    '<div class="stat-cell hi"><div class="sl">Máxima</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'')+'</div></div>'+
-    '<div class="stat-cell"><div class="sl">Total</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-    '<div class="stat-cell"><div class="sl">N dias</div><div class="sv">'+vv.length+'</div><div class="su">com dados</div></div>'+
-    '<div class="stat-cell"><div class="sl">Amplitude</div><div class="sv">'+fmt(mx-mn)+'</div><div class="su">'+vInfo.unit+'</div></div>';
+
+  if(varKey==='rain_total'){
+    // For rain: compute monthly sums from the filtered days, show those stats
+    var expMonSums={};
+    d.forEach(function(r){
+      if(r.rain_total==null) return;
+      var k=r.date.slice(0,7);
+      if(!expMonSums[k]) expMonSums[k]=0;
+      expMonSums[k]+=r.rain_total;
+    });
+    var monthSumVals=Object.values(expMonSums);
+    var msAvg=avg(monthSumVals), msMax=maxV(monthSumVals), msMin=minV(monthSumVals);
+    var msMaxMon=Object.keys(expMonSums).find(function(k){return expMonSums[k]===msMax;});
+    var msMinMon=Object.keys(expMonSums).find(function(k){return expMonSums[k]===msMin;});
+    document.getElementById('exp-stats').innerHTML=
+      '<div class="stat-cell avg"><div class="sl">Total acumulado</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">mm no período</div></div>'+
+      '<div class="stat-cell avg"><div class="sl">Média das somas mensais</div><div class="sv">'+fmt(msAvg,0)+'</div><div class="su">mm / mês</div></div>'+
+      '<div class="stat-cell hi"><div class="sl">Mês mais chuvoso</div><div class="sv">'+fmt(msMax,0)+'</div><div class="su">'+(msMaxMon||'—')+'</div></div>'+
+      '<div class="stat-cell lo"><div class="sl">Mês mais seco</div><div class="sv">'+fmt(msMin,0)+'</div><div class="su">'+(msMinMon||'—')+'</div></div>'+
+      '<div class="stat-cell hi"><div class="sl">Máxima diária</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'')+'</div></div>'+
+      '<div class="stat-cell"><div class="sl">Nº meses</div><div class="sv">'+monthSumVals.length+'</div><div class="su">meses com dados</div></div>';
+  } else {
+    document.getElementById('exp-stats').innerHTML=
+      '<div class="stat-cell avg"><div class="sl">Média</div><div class="sv">'+fmt(me)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+      '<div class="stat-cell lo"><div class="sl">Mínima</div><div class="sv">'+fmt(mn)+'</div><div class="su">'+(mnD?mnD.date:'')+'</div></div>'+
+      '<div class="stat-cell hi"><div class="sl">Máxima</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'')+'</div></div>'+
+      '<div class="stat-cell"><div class="sl">Total</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+      '<div class="stat-cell"><div class="sl">N dias</div><div class="sv">'+vv.length+'</div><div class="su">com dados</div></div>'+
+      '<div class="stat-cell"><div class="sl">Amplitude</div><div class="sv">'+fmt(mx-mn)+'</div><div class="su">'+vInfo.unit+'</div></div>';
+  }
 }
 
 // ═══════════════════════════════════════════ STATISTICS
@@ -736,21 +773,51 @@ function renderStats(){
   var html='';
   keys.forEach(function(k){
     var vInfo=VARS[k]; if(!vInfo) return;
+    var isRain=(k==='rain_total');
     var vals=d.map(function(r){return r[k];}).filter(function(v){return v!=null;});
     if(!vals.length) return;
     var mn=minV(vals),mx=maxV(vals),me=avg(vals),sm=smm(vals);
     var mnD=d.find(function(r){return r[k]===mn;});
     var mxD=d.find(function(r){return r[k]===mx;});
+
+    // For rain: compute monthly sums and their mean
+    var rainMonthlySums=null, rainMonthlyMean=null, rainMonthlyMax=null, rainMonthlyMin=null;
+    if(isRain){
+      var yrMon={};
+      d.forEach(function(r){
+        if(r.rain_total==null) return;
+        var mk=r.date.slice(0,7);
+        if(!yrMon[mk]) yrMon[mk]=0;
+        yrMon[mk]+=r.rain_total;
+      });
+      rainMonthlySums=Object.values(yrMon);
+      rainMonthlyMean=avg(rainMonthlySums);
+      rainMonthlyMax=maxV(rainMonthlySums);
+      rainMonthlyMin=minV(rainMonthlySums);
+    }
+
     html+='<div class="panel"><div class="panel-title" style="color:'+vInfo.color+'">'+vInfo.label+'</div>'+
       '<div class="panel-sub">'+d.length+' dias · '+vals.length+' com dados</div>'+
-      '<div class="stats-grid">'+
-      '<div class="stat-cell avg"><div class="sl">Média</div><div class="sv">'+fmt(me)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-      '<div class="stat-cell lo"><div class="sl">Mínima</div><div class="sv">'+fmt(mn)+'</div><div class="su">'+(mnD?mnD.date:'—')+'</div></div>'+
-      '<div class="stat-cell hi"><div class="sl">Máxima</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'—')+'</div></div>'+
-      '<div class="stat-cell"><div class="sl">Amplitude</div><div class="sv">'+fmt(mx-mn)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-      '<div class="stat-cell"><div class="sl">Total/Soma</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-      '<div class="stat-cell"><div class="sl">Desvio Padrão</div><div class="sv">'+fmt(Math.sqrt(vals.reduce(function(s,v){return s+(v-me)*(v-me);},0)/vals.length))+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-      '</div></div>';
+      '<div class="stats-grid">';
+
+    if(isRain){
+      html+=
+        '<div class="stat-cell avg"><div class="sl">Total acumulado</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">mm no período</div></div>'+
+        '<div class="stat-cell avg"><div class="sl">Média das somas mensais</div><div class="sv">'+fmt(rainMonthlyMean,0)+'</div><div class="su">mm / mês</div></div>'+
+        '<div class="stat-cell hi"><div class="sl">Mês mais chuvoso</div><div class="sv">'+fmt(rainMonthlyMax,0)+'</div><div class="su">mm (soma mensal)</div></div>'+
+        '<div class="stat-cell lo"><div class="sl">Mês mais seco</div><div class="sv">'+fmt(rainMonthlyMin,0)+'</div><div class="su">mm (soma mensal)</div></div>'+
+        '<div class="stat-cell"><div class="sl">Máx diária</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'—')+'</div></div>'+
+        '<div class="stat-cell"><div class="sl">Nº meses analisados</div><div class="sv">'+rainMonthlySums.length+'</div><div class="su">meses com dados</div></div>';
+    } else {
+      html+=
+        '<div class="stat-cell avg"><div class="sl">Média</div><div class="sv">'+fmt(me)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+        '<div class="stat-cell lo"><div class="sl">Mínima</div><div class="sv">'+fmt(mn)+'</div><div class="su">'+(mnD?mnD.date:'—')+'</div></div>'+
+        '<div class="stat-cell hi"><div class="sl">Máxima</div><div class="sv">'+fmt(mx)+'</div><div class="su">'+(mxD?mxD.date:'—')+'</div></div>'+
+        '<div class="stat-cell"><div class="sl">Amplitude</div><div class="sv">'+fmt(mx-mn)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+        '<div class="stat-cell"><div class="sl">Total/Soma</div><div class="sv">'+fmt(sm,0)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+        '<div class="stat-cell"><div class="sl">Desvio Padrão</div><div class="sv">'+fmt(Math.sqrt(vals.reduce(function(s,v){return s+(v-me)*(v-me);},0)/vals.length))+'</div><div class="su">'+vInfo.unit+'</div></div>';
+    }
+    html+='</div></div>';
   });
   document.getElementById('stats-panels').innerHTML=html||'<div style="padding:24px;color:var(--tx3)">Nenhum dado no período.</div>';
 }
@@ -782,41 +849,60 @@ function renderMonthly(){
   // Filter by year if selected
   if(yearFilter!=='all') monData=monData.filter(function(m){return String(m.year)===yearFilter;});
   var vInfo=VARS[varKey];
+  var isRain=(varKey==='rain_total');
   var lbls=monData.map(function(m){return m.key;});
+
+  // For precipitation: always use SUM (soma mensal). Type selector applies to other vars only.
   var vals=monData.map(function(m){
     var v=m.vals[varKey]||[];
     if(!v.length) return null;
+    if(isRain) return smm(v); // precipitação: sempre soma mensal
     if(typeKey==='mean') return avg(v);
     if(typeKey==='max') return maxV(v);
     if(typeKey==='min') return minV(v);
     if(typeKey==='sum') return smm(v);
     return avg(v);
   });
-  var typeLabel=['Média','Máxima','Mínima','Total'][['mean','max','min','sum'].indexOf(typeKey)];
+
+  var typeLabel;
+  if(isRain){
+    typeLabel='Total Mensal';
+  } else {
+    typeLabel=['Média','Máxima','Mínima','Total'][['mean','max','min','sum'].indexOf(typeKey)]||'Média';
+  }
   var yearLabel=yearFilter==='all'?'Todos os anos':yearFilter;
-  document.getElementById('mon-title').textContent=typeLabel+' Mensal — '+vInfo.label+' ('+yearLabel+')';
+  document.getElementById('mon-title').textContent=typeLabel+' — '+vInfo.label+' ('+yearLabel+')';
   var bgColors=lbls.map(function(l){
     var m=parseInt(l.slice(5,7));
     return FIRE_MONTHS.indexOf(m)>=0&&fireOn?'rgba(255,120,0,.6)':vInfo.color+'99';
   });
-  // Also draw series mean as reference line
-  var seriesMean=avg(DAILY.map(function(d){return d[varKey];}).filter(function(v){return v!=null;}));
+
+  // Reference line: for rain use mean of monthly sums; for others use mean of daily values
+  var seriesMean;
+  if(isRain){
+    var allMonData=getMonthlyData();
+    var allMonthlySums=allMonData.map(function(m){return smm(m.vals['rain_total']||[]);}).filter(function(v){return v!=null;});
+    seriesMean=avg(allMonthlySums);
+  } else {
+    seriesMean=avg(DAILY.map(function(d){return d[varKey];}).filter(function(v){return v!=null;}));
+  }
   var refLine=lbls.map(function(){return seriesMean;});
   var datasets=[
     {label:typeLabel,data:vals,backgroundColor:bgColors,borderWidth:0,type:'bar',order:2}
   ];
   if(seriesMean!=null){
     datasets.push({
-      label:'Média histórica série',data:refLine,type:'line',
-      borderColor:'#495057',borderWidth:1.5,borderDash:[4,3],
+      label:isRain?'Média histórica das somas mensais':'Média histórica série',data:refLine,type:'line',
+      borderColor:'#64748b',borderWidth:1.5,borderDash:[4,3],
       backgroundColor:'transparent',pointRadius:0,order:1
     });
   }
+  var yLabel=isRain?vInfo.unit+' (soma/mês)':vInfo.unit;
   var cfg={type:'bar',data:{labels:lbls,datasets:datasets},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:true,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT},
+      plugins:{legend:{display:true,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT},
       scales:{x:{grid:GR,ticks:Object.assign({},TK,{maxTicksLimit:18})},
-              y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:'#8492a6',font:{size:10}}}}}};
+              y:{grid:GR,ticks:TK,title:{display:true,text:yLabel,color:TK.color,font:{size:10}}}}}};
   mkChart('ch-mon',cfg);
   renderClim();
   renderNivel(varKey,yearFilter);
@@ -826,40 +912,70 @@ function renderNivel(varKey,yearFilter){
   if(!document.getElementById('ch-nivel')) return;
   var vInfo=VARS[varKey];
   yearFilter=yearFilter||document.getElementById('mon-year').value;
-  // Historical monthly means for the FULL series
+  var isRain=(varKey==='rain_total');
+
+  // Helper: compute monthly aggregates per calendar month (12 months)
+  // For rain: sum all daily values per month per year, then collect those sums per calendar month
+  // For others: collect all daily values per calendar month
   var histByMon=Array(12).fill(null).map(function(){return[];});
-  DAILY.forEach(function(d){var v=d[varKey];if(v!=null)histByMon[d.month-1].push(v);});
+  if(isRain){
+    // Group daily rain by year-month, sum each, then push into calendar month bucket
+    var yrMonSums={};
+    DAILY.forEach(function(d){
+      if(d.rain_total==null) return;
+      var k=d.date.slice(0,7);
+      if(!yrMonSums[k]) yrMonSums[k]={month:d.month,sum:0};
+      yrMonSums[k].sum+=d.rain_total;
+    });
+    Object.values(yrMonSums).forEach(function(o){histByMon[o.month-1].push(o.sum);});
+  } else {
+    DAILY.forEach(function(d){var v=d[varKey];if(v!=null)histByMon[d.month-1].push(v);});
+  }
   var histMeans=histByMon.map(avg);
   var histMax=histByMon.map(maxV);
   var histMin=histByMon.map(minV);
-  // Selected year or overall monthly means
+
+  // Selected year values
   var selByMon=Array(12).fill(null).map(function(){return[];});
   var filteredDays=yearFilter==='all'?DAILY:DAILY.filter(function(d){return String(d.year)===yearFilter;});
-  filteredDays.forEach(function(d){var v=d[varKey];if(v!=null)selByMon[d.month-1].push(v);});
+  if(isRain){
+    var selYrMonSums={};
+    filteredDays.forEach(function(d){
+      if(d.rain_total==null) return;
+      var k=d.date.slice(0,7);
+      if(!selYrMonSums[k]) selYrMonSums[k]={month:d.month,sum:0};
+      selYrMonSums[k].sum+=d.rain_total;
+    });
+    Object.values(selYrMonSums).forEach(function(o){selByMon[o.month-1].push(o.sum);});
+  } else {
+    filteredDays.forEach(function(d){var v=d[varKey];if(v!=null)selByMon[d.month-1].push(v);});
+  }
   var selMeans=selByMon.map(avg);
+
   // Anomaly = selected - historical
   var anomaly=selMeans.map(function(v,i){return(v!=null&&histMeans[i]!=null)?+(v-histMeans[i]).toFixed(2):null;});
   var yearLabel=yearFilter==='all'?'Série completa':yearFilter;
+  var labelSuffix=isRain?' (soma mensal)':'';
   document.getElementById('serie-nivel-sub').textContent=
-    'Comparação mês a mês: '+yearLabel+' vs. média histórica da série · '+vInfo.label;
+    'Comparação mês a mês: '+yearLabel+' vs. média histórica da série · '+vInfo.label+labelSuffix;
   var anomBg=anomaly.map(function(v){
     if(v==null) return 'rgba(180,180,180,.3)';
-    return v>0?'rgba(224,49,49,.6)':'rgba(25,113,194,.6)';
+    return v>0?'rgba(56,189,248,.6)':'rgba(248,113,113,.6)';
   });
   mkChart('ch-nivel',{
     type:'bar',
     data:{labels:MON_NAMES,datasets:[
       {label:yearLabel,data:selMeans,type:'line',borderColor:vInfo.color,backgroundColor:vInfo.bg,borderWidth:2,pointRadius:4,tension:.3,fill:true,order:1},
-      {label:'Média histórica',data:histMeans,type:'line',borderColor:'#495057',borderDash:[5,3],backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,order:2},
+      {label:'Média histórica',data:histMeans,type:'line',borderColor:'#64748b',borderDash:[5,3],backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,order:2},
       {label:'Anomalia',data:anomaly,backgroundColor:anomBg,borderWidth:0,yAxisID:'y2',order:3}
     ]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:true,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT,
-        title:{display:true,text:'Barras = anomalia (acima/abaixo da média histórica)',font:{size:10},color:'#8492a6',padding:{bottom:4}}},
+      plugins:{legend:{display:true,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT,
+        title:{display:true,text:'Barras = anomalia (acima/abaixo da média histórica'+(isRain?' das somas mensais':'')+') ',font:{size:10},color:TK.color,padding:{bottom:4}}},
       scales:{
         x:{grid:GR,ticks:TK},
-        y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:'#8492a6',font:{size:10}}},
-        y2:{position:'right',grid:{drawOnChartArea:false},ticks:TK,title:{display:true,text:'Anomalia ('+vInfo.unit+')',color:'#8492a6',font:{size:9}}}
+        y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit+(isRain?' / mês':''),color:TK.color,font:{size:10}}},
+        y2:{position:'right',grid:{drawOnChartArea:false},ticks:TK,title:{display:true,text:'Anomalia ('+vInfo.unit+')',color:TK.color,font:{size:9}}}
       }}
   });
   // Stats below
@@ -869,38 +985,62 @@ function renderNivel(varKey,yearFilter){
   var minAnom=minV(anomaly.filter(function(v){return v!=null;}));
   var maxAnomMon=anomaly.findIndex(function(v){return v===maxAnom;});
   var minAnomMon=anomaly.findIndex(function(v){return v===minAnom;});
+  var histLabel=isRain?'Média das somas mensais':'Média mensal histórica';
+  var selLabel=isRain?'Média das somas mensais ('+yearLabel+')':'Média mensal ('+yearLabel+')';
   document.getElementById('nivel-stats').innerHTML=
     '<div class="stat-cell hi"><div class="sl">Maior anomalia +</div><div class="sv">'+fmt(maxAnom)+'</div><div class="su">'+vInfo.unit+' · '+(maxAnomMon>=0?MON_NAMES[maxAnomMon]:'—')+'</div></div>'+
     '<div class="stat-cell lo"><div class="sl">Maior anomalia −</div><div class="sv">'+fmt(minAnom)+'</div><div class="su">'+vInfo.unit+' · '+(minAnomMon>=0?MON_NAMES[minAnomMon]:'—')+'</div></div>'+
     '<div class="stat-cell"><div class="sl">Meses acima da média</div><div class="sv">'+posAnomMonths+'</div><div class="su">de 12 meses</div></div>'+
     '<div class="stat-cell"><div class="sl">Meses abaixo da média</div><div class="sv">'+negAnomMonths+'</div><div class="su">de 12 meses</div></div>'+
-    '<div class="stat-cell avg"><div class="sl">Média histórica série</div><div class="sv">'+fmt(avg(histMeans))+'</div><div class="su">'+vInfo.unit+' (anual)</div></div>'+
-    '<div class="stat-cell"><div class="sl">Média '+yearLabel+'</div><div class="sv">'+fmt(avg(selMeans.filter(function(v){return v!=null;})))+'</div><div class="su">'+vInfo.unit+' (anual)</div></div>';
+    '<div class="stat-cell avg"><div class="sl">'+histLabel+'</div><div class="sv">'+fmt(avg(histMeans))+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+    '<div class="stat-cell"><div class="sl">'+selLabel+'</div><div class="sv">'+fmt(avg(selMeans.filter(function(v){return v!=null;})))+'</div><div class="su">'+vInfo.unit+'</div></div>';
 }
 function renderClim(){
   var varKey=document.getElementById('mon-var').value;
   var vInfo=VARS[varKey];
-  var byMon=Array(12).fill(null).map(function(){return[];});
-  DAILY.forEach(function(d){
-    var v=d[varKey];
-    if(v!=null) byMon[d.month-1].push(v);
-  });
-  var means=byMon.map(avg);
-  var maxs=byMon.map(maxV);
-  var mins=byMon.map(minV);
+  var isRain=(varKey==='rain_total');
+  var means, maxs, mins;
+
+  if(isRain){
+    // Group by year-month, sum each month, then collect per calendar month
+    var yrMonSums={};
+    DAILY.forEach(function(d){
+      if(d.rain_total==null) return;
+      var k=d.date.slice(0,7);
+      if(!yrMonSums[k]) yrMonSums[k]={month:d.month,sum:0};
+      yrMonSums[k].sum+=d.rain_total;
+    });
+    var byCalMon=Array(12).fill(null).map(function(){return[];});
+    Object.values(yrMonSums).forEach(function(o){byCalMon[o.month-1].push(o.sum);});
+    means=byCalMon.map(avg);
+    maxs=byCalMon.map(maxV);
+    mins=byCalMon.map(minV);
+  } else {
+    var byMon=Array(12).fill(null).map(function(){return[];});
+    DAILY.forEach(function(d){
+      var v=d[varKey];
+      if(v!=null) byMon[d.month-1].push(v);
+    });
+    means=byMon.map(avg);
+    maxs=byMon.map(maxV);
+    mins=byMon.map(minV);
+  }
+
   var bgCl=MON_NAMES.map(function(_,i){
-    return FIRE_MONTHS.indexOf(i+1)>=0?'rgba(255,120,0,.45)':'rgba(92,124,250,.55)';
+    return FIRE_MONTHS.indexOf(i+1)>=0?'rgba(255,120,0,.55)':'rgba(56,189,248,.4)';
   });
+  var yLabel=isRain?vInfo.unit+' (soma/mês)':vInfo.unit;
+  var mainLabel=isRain?'Média das somas mensais':'Média';
   mkChart('ch-clim',{
     type:'bar',
     data:{labels:MON_NAMES,datasets:[
-      {label:'Média',data:means,backgroundColor:bgCl,borderWidth:0},
-      {label:'Máx',data:maxs,type:'line',borderColor:'#d9480f',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,tension:.3},
-      {label:'Mín',data:mins,type:'line',borderColor:'#1971c2',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,tension:.3}
+      {label:mainLabel,data:means,backgroundColor:bgCl,borderWidth:0},
+      {label:'Máx',data:maxs,type:'line',borderColor:'#fb923c',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,tension:.3},
+      {label:'Mín',data:mins,type:'line',borderColor:'#38bdf8',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,tension:.3}
     ]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:true,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT},
-      scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:'#8492a6',font:{size:10}}}}}
+      plugins:{legend:{display:true,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT},
+      scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:yLabel,color:TK.color,font:{size:10}}}}}
   });
   document.getElementById('clim-stats').innerHTML=
     MON_NAMES.map(function(mn,i){
@@ -908,7 +1048,7 @@ function renderClim(){
       return '<div class="stat-cell'+(isFire?' hi':'')+'">'+
         '<div class="sl">'+(isFire?'🔥 ':'')+mn+'</div>'+
         '<div class="sv">'+fmt(means[i])+'</div>'+
-        '<div class="su">'+vInfo.unit+' · '+fmt(mins[i])+'–'+fmt(maxs[i])+'</div></div>';
+        '<div class="su">'+yLabel+' · '+fmt(mins[i])+'–'+fmt(maxs[i])+'</div></div>';
     }).join('');
 }
 
@@ -916,6 +1056,7 @@ function renderClim(){
 function renderAnnual(){
   var varKey=document.getElementById('ann-var').value;
   var vInfo=VARS[varKey];
+  var isRain=(varKey==='rain_total');
   var byYear={};
   DAILY.forEach(function(d){
     if(!byYear[d.year]) byYear[d.year]={year:d.year,vals:{},rain:[]};
@@ -928,33 +1069,48 @@ function renderAnnual(){
     if(d.rain_total!=null) byYear[d.year].rain.push(d.rain_total);
   });
   var years=Object.keys(byYear).sort();
-  var means=years.map(function(y){var v=byYear[y].vals[varKey]||[];return avg(v);});
-  var maxs=years.map(function(y){var v=byYear[y].vals[varKey]||[];return maxV(v);});
-  var mins=years.map(function(y){var v=byYear[y].vals[varKey]||[];return minV(v);});
   var rains=years.map(function(y){return smm(byYear[y].rain);});
   document.getElementById('ann-title').textContent='Resumo Anual — '+vInfo.label;
-  mkChart('ch-ann',{
-    type:'bar',
-    data:{labels:years,datasets:[
-      {label:'Média',data:means,backgroundColor:'rgba(92,124,250,.5)',borderWidth:0},
-      {label:'Máxima',data:maxs,type:'line',borderColor:'#d9480f',backgroundColor:'transparent',borderWidth:1.5,pointRadius:4,tension:.3},
-      {label:'Mínima',data:mins,type:'line',borderColor:'#1971c2',backgroundColor:'transparent',borderWidth:1.5,pointRadius:4,tension:.3}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
-      plugins:{legend:{display:true,labels:{color:'#4a5568',font:{size:10},boxWidth:10}},tooltip:TT},
-      scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:'#8492a6',font:{size:10}}}}}
-  });
+
+  if(isRain){
+    // For rain: single bar chart with annual totals
+    mkChart('ch-ann',barCfg(years,[
+      {label:'Precipitação Total Anual (mm)',data:rains,backgroundColor:'rgba(96,165,250,.55)',borderWidth:0}
+    ],'mm'));
+  } else {
+    var means=years.map(function(y){var v=byYear[y].vals[varKey]||[];return avg(v);});
+    var maxs=years.map(function(y){var v=byYear[y].vals[varKey]||[];return maxV(v);});
+    var mins=years.map(function(y){var v=byYear[y].vals[varKey]||[];return minV(v);});
+    mkChart('ch-ann',{
+      type:'bar',
+      data:{labels:years,datasets:[
+        {label:'Média',data:means,backgroundColor:'rgba(96,165,250,.4)',borderWidth:0},
+        {label:'Máxima',data:maxs,type:'line',borderColor:'#fb923c',backgroundColor:'transparent',borderWidth:1.5,pointRadius:4,tension:.3},
+        {label:'Mínima',data:mins,type:'line',borderColor:'#38bdf8',backgroundColor:'transparent',borderWidth:1.5,pointRadius:4,tension:.3}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
+        plugins:{legend:{display:true,labels:{color:TK.color,font:{size:10},boxWidth:10}},tooltip:TT},
+        scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:TK.color,font:{size:10}}}}}
+    });
+  }
   mkChart('ch-ann-rain',barCfg(years,[
-    {label:'Precipitação Total (mm)',data:rains,backgroundColor:'rgba(25,113,194,.55)',borderWidth:0}
+    {label:'Precipitação Total (mm)',data:rains,backgroundColor:'rgba(96,165,250,.55)',borderWidth:0}
   ],'mm'));
   // Annual table
   var keys=['temp_mean','temp_min','temp_max','humidity_mean','rain_total','solar_mean','wind_mean'];
   var tblHtml='<table><thead><tr><th>Ano</th>'+
-    keys.map(function(k){return '<th>'+VARS[k].label.replace(' ','<br>')+'<br><span style="font-weight:400">'+VARS[k].unit+'</span></th>';}).join('')+
+    keys.map(function(k){
+      var extra=k==='rain_total'?'<br><span style="font-weight:400;font-size:.55rem">Soma anual</span>':'';
+      return '<th>'+VARS[k].label.replace(' ','<br>')+'<br><span style="font-weight:400">'+VARS[k].unit+'</span>'+extra+'</th>';
+    }).join('')+
     '</tr></thead><tbody>';
   years.forEach(function(y){
     tblHtml+='<tr><td>'+y+'</td>'+keys.map(function(k){
       var v=byYear[y].vals[k]||[];
+      if(k==='rain_total'){
+        var total=smm(v);
+        return '<td title="Soma anual">'+fmt(total,0)+'</td>';
+      }
       var me=avg(v),mn=minV(v),mx=maxV(v);
       return '<td title="Mín: '+fmt(mn)+' · Máx: '+fmt(mx)+'">'+fmt(me)+'</td>';
     }).join('')+'</tr>';
@@ -988,28 +1144,57 @@ function renderQueimadas(){
   var nonFireDays=d.filter(function(r){return !isFire(r.date)&&r[varKey]!=null;});
   var fVals=fireDays.map(function(r){return r[varKey];});
   var nVals=nonFireDays.map(function(r){return r[varKey];});
+  var isRain=(varKey==='rain_total');
+  var fStat, nStat, fStatLabel, nStatLabel, diffLabel, diffVal;
+  if(isRain){
+    // sum per month then average those sums
+    var fMonSums={}, nMonSums={};
+    fireDays.forEach(function(r){var k=r.date.slice(0,7);if(!fMonSums[k])fMonSums[k]=0;fMonSums[k]+=r.rain_total;});
+    nonFireDays.forEach(function(r){var k=r.date.slice(0,7);if(!nMonSums[k])nMonSums[k]=0;nMonSums[k]+=r.rain_total;});
+    fStat=avg(Object.values(fMonSums)); nStat=avg(Object.values(nMonSums));
+    fStatLabel='🔥 Média somas mensais (proibitivo)'; nStatLabel='Média somas mensais (fora)';
+    diffVal=fStat!=null&&nStat!=null?+(fStat-nStat).toFixed(1):null;
+    diffLabel='Diferença somas mensais';
+  } else {
+    fStat=avg(fVals); nStat=avg(nVals);
+    fStatLabel='🔥 Média no período proibitivo'; nStatLabel='Média fora do período';
+    diffVal=fStat!=null&&nStat!=null?+(fStat-nStat).toFixed(2):null;
+    diffLabel='Diferença (proib – fora)';
+  }
   document.getElementById('fire-stats').innerHTML=
-    '<div class="stat-cell hi"><div class="sl">🔥 Média no período proibitivo</div><div class="sv">'+fmt(avg(fVals))+'</div><div class="su">'+vInfo.unit+' · Jun–Set</div></div>'+
-    '<div class="stat-cell lo"><div class="sl">Média fora do período</div><div class="sv">'+fmt(avg(nVals))+'</div><div class="su">'+vInfo.unit+' · Out–Mai</div></div>'+
-    '<div class="stat-cell hi"><div class="sl">🔥 Máxima no período</div><div class="sv">'+fmt(maxV(fVals))+'</div><div class="su">'+vInfo.unit+'</div></div>'+
-    '<div class="stat-cell lo"><div class="sl">Mínima no período proibitivo</div><div class="sv">'+fmt(minV(fVals))+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+    '<div class="stat-cell hi"><div class="sl">'+fStatLabel+'</div><div class="sv">'+fmt(fStat)+'</div><div class="su">'+vInfo.unit+' · Jun–Set</div></div>'+
+    '<div class="stat-cell lo"><div class="sl">'+nStatLabel+'</div><div class="sv">'+fmt(nStat)+'</div><div class="su">'+vInfo.unit+' · Out–Mai</div></div>'+
+    '<div class="stat-cell hi"><div class="sl">🔥 '+(isRain?'Total acumulado proibitivo':'Máxima no período')+'</div><div class="sv">'+fmt(isRain?smm(fVals):maxV(fVals),isRain?0:1)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
+    '<div class="stat-cell lo"><div class="sl">'+(isRain?'Total acumulado fora':'Mínima no período proibitivo')+'</div><div class="sv">'+fmt(isRain?smm(nVals):minV(fVals),isRain?0:1)+'</div><div class="su">'+vInfo.unit+'</div></div>'+
     '<div class="stat-cell"><div class="sl">Dias proibitivos com dados</div><div class="sv">'+fVals.length+'</div><div class="su">dias</div></div>'+
-    '<div class="stat-cell"><div class="sl">Diferença (proib – fora)</div><div class="sv">'+fmt(avg(fVals)-avg(nVals))+'</div><div class="su">'+vInfo.unit+'</div></div>';
-  // clim chart fire
-  var byMon=Array(12).fill(null).map(function(){return[];});
-  DAILY.forEach(function(r){var v=r[varKey];if(v!=null) byMon[r.month-1].push(v);});
-  var bgCl=MON_NAMES.map(function(_,i){return FIRE_MONTHS.indexOf(i+1)>=0?'rgba(255,120,0,.65)':'rgba(92,124,250,.5)';});
+    '<div class="stat-cell"><div class="sl">'+diffLabel+'</div><div class="sv">'+fmt(diffVal)+'</div><div class="su">'+vInfo.unit+'</div></div>';
+  // clim chart fire - for rain use mean of monthly sums per calendar month
+  var bgCl=MON_NAMES.map(function(_,i){return FIRE_MONTHS.indexOf(i+1)>=0?'rgba(255,120,0,.65)':'rgba(56,189,248,.4)';});
+  var climData, yLbl, climTitle;
+  if(isRain){
+    var yrMonS={};
+    DAILY.forEach(function(r){if(r.rain_total==null)return;var k=r.date.slice(0,7);if(!yrMonS[k])yrMonS[k]={m:r.month,s:0};yrMonS[k].s+=r.rain_total;});
+    var calMon=Array(12).fill(null).map(function(){return[];});
+    Object.values(yrMonS).forEach(function(o){calMon[o.m-1].push(o.s);});
+    climData=calMon.map(avg);
+    yLbl='mm (soma mensal)'; climTitle='Média das somas mensais — período proibitivo em laranja';
+  } else {
+    var byMon2=Array(12).fill(null).map(function(){return[];});
+    DAILY.forEach(function(r){var v=r[varKey];if(v!=null) byMon2[r.month-1].push(v);});
+    climData=byMon2.map(avg);
+    yLbl=vInfo.unit; climTitle='Climatologia mensal — barras laranjas = período proibitivo (Jun–Set)';
+  }
   mkChart('ch-fire-clim',{
     type:'bar',
     data:{labels:MON_NAMES,datasets:[
-      {label:'Média Mensal',data:byMon.map(avg),backgroundColor:bgCl,borderWidth:0}
+      {label:isRain?'Média soma mensal':'Média Mensal',data:climData,backgroundColor:bgCl,borderWidth:0}
     ]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:350},
       plugins:{
         legend:{display:false},tooltip:TT,
-        title:{display:true,text:'Barras laranjas = período proibitivo (Jun–Set)',font:{size:11},color:'#c05500',padding:{bottom:6}}
+        title:{display:true,text:climTitle,font:{size:11},color:'#fb923c',padding:{bottom:6}}
       },
-      scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:vInfo.unit,color:'#8492a6',font:{size:10}}}}}
+      scales:{x:{grid:GR,ticks:TK},y:{grid:GR,ticks:TK,title:{display:true,text:yLbl,color:TK.color,font:{size:10}}}}}
   });
 }
 

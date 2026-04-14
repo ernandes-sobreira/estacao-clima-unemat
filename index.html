@@ -1513,29 +1513,10 @@ function processFile(file){
         }
         saveToGitHub(newRec,file.name,name,inst,note).then(function(res){
           st.innerHTML='<div class="ui-row"><span>✅ '+file.name+'</span><span class="upd-ok">+'+res.added+' dias · total: '+res.total+' · GitHub atualizado! 🎉</span></div>';
-          showToast('✅ '+res.added+' dias adicionados!');
-          // Reload daily.json from GitHub and refresh all UI
-          _dailyLoaded=false;
-          loadDaily().then(function(){
-            // Re-init header and dates
-            var maxD=DAILY[DAILY.length-1].date;
-            var minD=DAILY[0].date;
-            var d1y=new Date(maxD);d1y.setFullYear(d1y.getFullYear()-1);
-            document.getElementById('exp-from').value=d1y.toISOString().slice(0,10);
-            document.getElementById('exp-to').value=maxD;
-            document.getElementById('stat-from').value=minD;
-            document.getElementById('stat-to').value=maxD;
-            var totalObs=DAILY.reduce(function(s,d){return s+(d.n_obs||0);},0);
-            document.getElementById('hdr-obs').textContent=totalObs.toLocaleString('pt-BR');
-            document.getElementById('hdr-dias').textContent=DAILY.length.toLocaleString('pt-BR');
-            document.getElementById('hdr-period-sub').textContent=minD.slice(0,7).replace('-','/')+' → '+maxD.slice(0,7).replace('-','/');
-            var parts=maxD.split('-');
-            document.getElementById('last-update-date').textContent=parts[2]+'/'+parts[1]+'/'+parts[0];
-            var diffDays=Math.floor((new Date()-new Date(maxD+'T12:00:00'))/(1000*60*60*24));
-            document.getElementById('last-update-days').textContent=diffDays===0?'(hoje)':diffDays===1?'(ontem)':'(há '+diffDays+' dias)';
-            document.getElementById('footer-range').textContent=minD+' → '+maxD;
-            renderOverview();renderTable();
-          });
+          showToast('✅ '+res.added+' dias adicionados! Recarregando em 5s…');
+          if(res.added>0){
+            setTimeout(function(){location.reload();},5000);
+          }
         }).catch(function(err){
           st.innerHTML='<div class="ui-row"><span>'+file.name+'</span><span class="upd-er">⚠️ '+err.message+'</span></div>';
           hideProgress();
@@ -1588,11 +1569,11 @@ async function initApp(){
 
   // Then try to fetch daily.json for newer data (silently)
   try{
-    var base=location.href.replace(/\/[^\/]*$/,'/');
-    var r=await fetch(base+'daily.json?v='+Date.now());
+    var origin=location.origin+location.pathname.replace(/\/[^\/]*$/,'/');
+    var r=await fetch(origin+'daily.json?v='+Date.now());
     if(r.ok){
       var remote=await r.json();
-      if(remote.length>DAILY.length){
+      if(remote.length>0 && remote[remote.length-1].date > DAILY[DAILY.length-1].date){
         DAILY=remote;
         renderUI();
       }

@@ -1505,12 +1505,30 @@ function processFile(file){
           renderOverview();renderTable();return;
         }
         saveToGitHub(newRec,file.name,name,inst,note).then(function(res){
-          var existSet=new Set(DAILY.map(function(d){return d.date;}));
-          newRec.forEach(function(r){if(!existSet.has(r.date))DAILY.push(r);});
-          DAILY.sort(function(a,b){return a.date.localeCompare(b.date);});
           st.innerHTML='<div class="ui-row"><span>✅ '+file.name+'</span><span class="upd-ok">+'+res.added+' dias · total: '+res.total+' · GitHub atualizado! 🎉</span></div>';
-          renderOverview();renderTable();
-          showToast('✅ '+res.added+' dias adicionados ao GitHub!');
+          showToast('✅ '+res.added+' dias adicionados!');
+          // Reload daily.json from GitHub and refresh all UI
+          _dailyLoaded=false;
+          loadDaily().then(function(){
+            // Re-init header and dates
+            var maxD=DAILY[DAILY.length-1].date;
+            var minD=DAILY[0].date;
+            var d1y=new Date(maxD);d1y.setFullYear(d1y.getFullYear()-1);
+            document.getElementById('exp-from').value=d1y.toISOString().slice(0,10);
+            document.getElementById('exp-to').value=maxD;
+            document.getElementById('stat-from').value=minD;
+            document.getElementById('stat-to').value=maxD;
+            var totalObs=DAILY.reduce(function(s,d){return s+(d.n_obs||0);},0);
+            document.getElementById('hdr-obs').textContent=totalObs.toLocaleString('pt-BR');
+            document.getElementById('hdr-dias').textContent=DAILY.length.toLocaleString('pt-BR');
+            document.getElementById('hdr-period-sub').textContent=minD.slice(0,7).replace('-','/')+' → '+maxD.slice(0,7).replace('-','/');
+            var parts=maxD.split('-');
+            document.getElementById('last-update-date').textContent=parts[2]+'/'+parts[1]+'/'+parts[0];
+            var diffDays=Math.floor((new Date()-new Date(maxD+'T12:00:00'))/(1000*60*60*24));
+            document.getElementById('last-update-days').textContent=diffDays===0?'(hoje)':diffDays===1?'(ontem)':'(há '+diffDays+' dias)';
+            document.getElementById('footer-range').textContent=minD+' → '+maxD;
+            renderOverview();renderTable();
+          });
         }).catch(function(err){
           st.innerHTML='<div class="ui-row"><span>'+file.name+'</span><span class="upd-er">⚠️ '+err.message+'</span></div>';
           hideProgress();

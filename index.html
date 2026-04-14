@@ -432,6 +432,16 @@ footer{border-top:1.5px solid var(--bd);padding:14px 32px;
 <!-- ═══════════════════════════════════════════════════════ UPLOAD -->
 <section id="sec-upload" class="sec">
 <div class="wrap">
+
+  <!-- ADMIN HEADER -->
+  <div style="background:linear-gradient(135deg,rgba(56,189,248,.08),rgba(52,211,153,.06));border:1px solid rgba(56,189,248,.2);border-radius:12px;padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:2rem">🛡️</div>
+    <div>
+      <div style="font-size:1rem;font-weight:700;color:#e8edf5;letter-spacing:.02em">Área de Administração</div>
+      <div style="font-size:.72rem;color:#64748b;margin-top:2px">Acesso restrito · Estação Climatológica UNEMAT · Cáceres-MT</div>
+    </div>
+  </div>
+
   <div class="panel">
     <div class="panel-title">🔧 Configuração GitHub</div>
     <div class="panel-sub">Configure uma vez — dados salvos no navegador</div>
@@ -1397,20 +1407,35 @@ async function saveToGitHub(newRec,fileName,name,inst,note){
   var existing=JSON.parse(match[1]);
   var existSet=new Set(existing.map(function(d){return d.date;}));
   var added=newRec.filter(function(r){return !existSet.has(r.date);});
-  if(!added.length)return{added:0,total:existing.length};
-  var merged=existing.concat(added).sort(function(a,b){return a.date.localeCompare(b.date);});
-  setProgress(50,'✏️ Atualizando HTML…');
-  var newHtml=curHtml.replace(/var DAILY = \[[\s\S]*?\];\n/,'var DAILY = '+JSON.stringify(merged)+';\n');
-  setProgress(70,'🚀 Enviando para GitHub…');
   var now=new Date().toISOString();
-  var r=await ghPutFile('index.html',b64enc(newHtml),'📊 +'+added.length+' dias — '+now.slice(0,10)+' — '+name,indexFile.sha);
-  if(!r.ok){var e=await r.json();throw new Error('GitHub: '+(e.message||r.status));}
-  setProgress(85,'📋 Salvando log…');
+
+  // Always save log (even if 0 new days)
+  setProgress(50,'📋 Salvando log…');
   var logFile=await ghGetFile('upload_log.json');
   var logData=[];
   if(logFile)try{logData=JSON.parse(b64dec(logFile.content));}catch(e){}
-  logData.unshift({timestamp:now,uploader_name:name,uploader_inst:inst||'',uploader_note:note||'',file_name:fileName,days_added:added.length,total_days:merged.length,first_new_date:added[0].date,last_new_date:added[added.length-1].date});
+  logData.unshift({
+    timestamp:now,
+    uploader_name:name,
+    uploader_inst:inst||'',
+    uploader_note:note||'',
+    file_name:fileName,
+    days_added:added.length,
+    total_days:existing.length+(added.length),
+    first_new_date:added.length?added[0].date:null,
+    last_new_date:added.length?added[added.length-1].date:null,
+    status:added.length?'novo':'sem_novos'
+  });
   await ghPutFile('upload_log.json',b64enc(JSON.stringify(logData,null,2)),'📋 Log: '+name+' — '+now.slice(0,10),logFile?logFile.sha:null);
+
+  if(!added.length){setProgress(100,'✅ Concluído!');hideProgress();return{added:0,total:existing.length};}
+
+  var merged=existing.concat(added).sort(function(a,b){return a.date.localeCompare(b.date);});
+  setProgress(70,'✏️ Atualizando HTML…');
+  var newHtml=curHtml.replace(/var DAILY = \[[\s\S]*?\];\n/,'var DAILY = '+JSON.stringify(merged)+';\n');
+  setProgress(85,'🚀 Enviando para GitHub…');
+  var r=await ghPutFile('index.html',b64enc(newHtml),'📊 +'+added.length+' dias — '+now.slice(0,10)+' — '+name,indexFile.sha);
+  if(!r.ok){var e=await r.json();throw new Error('GitHub: '+(e.message||r.status));}
   setProgress(100,'✅ Concluído!');hideProgress();
   return{added:added.length,total:merged.length};
 }

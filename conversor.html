@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Conversor HOBOlink - Estação UNEMAT Cáceres</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#f7f9fc; --bd:#e2e8f0; --bd2:#cbd5e1;
+    --tx:#0f172a; --tx2:#475569; --tx3:#64748b;
+    --ac:#0369a1; --ac2:#0891b2; --ok:#059669; --wn:#b45309; --er:#b91c1c;
+    --ok-bg:#ecfdf5; --wn-bg:#fffbeb; --er-bg:#fef2f2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px}
+  body{
+    background:var(--bg);color:var(--tx);
+    font-family:'Source Sans 3',system-ui,sans-serif;
+    line-height:1.55; padding:32px 16px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  header{
+    border-bottom:2px solid var(--bd);
+    padding-bottom:20px; margin-bottom:28px;
+  }
+  h1{
+    font-size:1.65rem;font-weight:700;letter-spacing:-0.01em;
+    color:var(--tx); margin-bottom:6px;
+  }
+  .sub{font-size:0.95rem;color:var(--tx2)}
+  h2{
+    font-size:1.15rem;font-weight:600;color:var(--tx);
+    margin:28px 0 12px; display:flex;align-items:center;gap:10px;
+  }
+  h2 .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:50%;
+    background:var(--ac);color:#fff;font-size:0.85rem;font-weight:700;
+    flex-shrink:0;
+  }
+  p{font-size:0.95rem;color:var(--tx2);margin-bottom:10px}
+
+  .panel{
+    background:var(--bg2);border:1.5px solid var(--bd);
+    border-radius:10px;padding:22px;margin-bottom:18px;
+  }
+  .dz{
+    border:2px dashed var(--bd2);border-radius:10px;
+    padding:38px 20px;text-align:center;cursor:pointer;
+    background:#fff;transition:all .15s;
+  }
+  .dz:hover,.dz.drag{border-color:var(--ac);background:#f0f9ff}
+  .dz-ico{font-size:2.2rem;margin-bottom:10px}
+  .dz-t{font-size:1.05rem;font-weight:600;color:var(--tx)}
+  .dz-s{font-size:0.85rem;color:var(--tx3);margin-top:4px}
+  .dz input{display:none}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1.5px solid var(--bd2);border-radius:8px;
+    padding:10px 18px;font-size:0.92rem;font-weight:600;
+    color:var(--tx);cursor:pointer;font-family:inherit;
+    transition:all .15s;
+  }
+  .btn:hover{border-color:var(--ac);color:var(--ac)}
+  .btn.primary{background:var(--ac);border-color:var(--ac);color:#fff}
+  .btn.primary:hover{background:#075985;border-color:#075985;color:#fff}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+  .status{
+    padding:14px 16px;border-radius:8px;font-size:0.9rem;
+    border:1.5px solid;margin-top:14px;
+  }
+  .status.ok{background:var(--ok-bg);border-color:#a7f3d0;color:var(--ok)}
+  .status.wn{background:var(--wn-bg);border-color:#fde68a;color:var(--wn)}
+  .status.er{background:var(--er-bg);border-color:#fecaca;color:var(--er)}
+  .status.info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+
+  .kpis{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px;margin-top:14px;
+  }
+  .kpi{
+    background:#fff;border:1.5px solid var(--bd);border-radius:8px;
+    padding:12px 14px;
+  }
+  .kpi-lbl{font-size:0.72rem;color:var(--tx3);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+  .kpi-val{font-size:1.15rem;font-weight:700;color:var(--tx);
+    font-family:'JetBrains Mono',monospace}
+
+  table{
+    width:100%;border-collapse:collapse;margin-top:12px;
+    font-size:0.82rem;
+  }
+  th,td{
+    padding:7px 10px;text-align:left;
+    border-bottom:1px solid var(--bd);
+  }
+  th{background:#f1f5f9;font-weight:600;color:var(--tx2);
+    font-size:0.72rem;text-transform:uppercase;letter-spacing:.05em}
+  td{font-family:'JetBrains Mono',monospace;color:var(--tx2)}
+  .tw{max-height:260px;overflow-y:auto;border:1.5px solid var(--bd);
+    border-radius:8px;background:#fff}
+
+  textarea{
+    width:100%;height:200px;padding:12px;
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+    border:1.5px solid var(--bd);border-radius:8px;
+    background:#fff;color:var(--tx);resize:vertical;
+  }
+
+  .instr{
+    background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;
+    padding:18px 22px;margin-bottom:24px;
+  }
+  .instr ol{margin:8px 0 0 20px;font-size:0.92rem;color:var(--tx2)}
+  .instr li{margin:4px 0}
+  .instr strong{color:var(--tx)}
+  .instr code{
+    background:#dbeafe;padding:1px 6px;border-radius:4px;
+    font-family:'JetBrains Mono',monospace;font-size:0.85em;
+  }
+
+  .hidden{display:none}
+  .muted{color:var(--tx3);font-size:0.85rem}
+  .link{color:var(--ac);text-decoration:underline}
+  .link:hover{color:#075985}
+
+  footer{
+    margin-top:40px;padding-top:20px;border-top:1px solid var(--bd);
+    font-size:0.78rem;color:var(--tx3);text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Conversor HOBOlink → daily.json</h1>
+  <div class="sub">Estação Climatológica UNEMAT · Cáceres-MT · Pantanal Norte</div>
+</header>
+
+<div class="instr">
+  <strong>Como usar esta ferramenta</strong>
+  <ol>
+    <li>Exporte do HOBOlink o arquivo <code>.xlsx</code> do período desejado (dados de 5 em 5 minutos).</li>
+    <li>Na <strong>Etapa 1</strong>, carregue o <code>daily.json</code> atual do repositório (baixe de: <span class="muted">github.com/ernandes-sobreira/estacao-clima-unemat → arquivo daily.json → botão Raw → salvar como</span>).</li>
+    <li>Na <strong>Etapa 2</strong>, arraste o arquivo <code>.xlsx</code> do HOBOlink.</li>
+    <li>Confira os dias novos que serão adicionados.</li>
+    <li>Na <strong>Etapa 3</strong>, baixe o novo <code>daily.json</code> atualizado.</li>
+    <li>No GitHub, edite o arquivo <code>daily.json</code> do repositório e substitua o conteúdo pelo novo.</li>
+  </ol>
+</div>
+
+<!-- ETAPA 1 -->
+<h2><span class="num">1</span> Carregar o daily.json atual</h2>
+<p>Este é o banco de dados consolidado da estação. Você precisa dele para que os dados novos sejam somados aos antigos sem perder nada.</p>
+<div class="panel">
+  <div class="btn-row">
+    <button class="btn primary" id="btn-fetch-gh">Buscar do GitHub (ernandes-sobreira/estacao-clima-unemat)</button>
+    <label class="btn" for="daily-file">Ou carregar do computador</label>
+    <input type="file" id="daily-file" accept=".json" style="display:none">
+  </div>
+  <div id="daily-status"></div>
+</div>
+
+<!-- ETAPA 2 -->
+<h2><span class="num">2</span> Processar o arquivo do HOBOlink</h2>
+<p>Arraste abaixo o arquivo <code>.xlsx</code> exportado do HOBOlink RX2100. A data no HOBOlink está em formato americano (MM/DD/YY) e será convertida corretamente.</p>
+<div class="panel">
+  <div class="dz" id="dz">
+    <div class="dz-ico">📊</div>
+    <div class="dz-t">Arraste ou clique - arquivo .xlsx</div>
+    <div class="dz-s">Planilha HOBOlink com leituras de 5 em 5 minutos</div>
+    <input type="file" id="xlsx-file" accept=".xlsx">
+  </div>
+  <div id="xlsx-status"></div>
+  <div id="preview-wrap" class="hidden">
+    <div class="kpis" id="kpis"></div>
+    <div style="margin-top:14px">
+      <strong style="font-size:0.9rem">Dias novos a adicionar:</strong>
+    </div>
+    <div class="tw">
+      <table id="preview-tb">
+        <thead>
+          <tr>
+            <th>Data</th><th>T méd</th><th>T min</th><th>T máx</th>
+            <th>UR méd</th><th>Chuva</th><th>Solar méd</th><th>N obs</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ETAPA 3 -->
+<h2><span class="num">3</span> Gerar o daily.json atualizado</h2>
+<p>Baixe o arquivo pronto ou copie o conteúdo para colar no GitHub.</p>
+<div class="panel">
+  <div class="btn-row">
+    <button class="btn primary" id="btn-download" disabled>Baixar daily.json atualizado</button>
+    <button class="btn" id="btn-copy" disabled>Copiar conteúdo para área de transferência</button>
+  </div>
+  <div id="final-status"></div>
+  <details style="margin-top:14px" id="preview-json-wrap" class="hidden">
+    <summary style="cursor:pointer;font-weight:600;color:var(--tx2);font-size:0.9rem">Visualizar conteúdo (primeiros 2000 caracteres)</summary>
+    <textarea id="preview-json" readonly style="margin-top:10px"></textarea>
+  </details>
+</div>
+
+<!-- INSTRUÇÕES FINAIS -->
+<h2><span class="num">4</span> Enviar para o GitHub</h2>
+<div class="panel">
+  <p><strong>Depois de baixar o novo daily.json:</strong></p>
+  <ol style="margin:8px 0 0 20px;font-size:0.95rem;color:var(--tx2);line-height:1.8">
+    <li>Acesse <a href="https://github.com/ernandes-sobreira/estacao-clima-unemat/blob/main/daily.json" target="_blank" class="link">github.com/ernandes-sobreira/estacao-clima-unemat/blob/main/daily.json</a></li>
+    <li>Clique no ícone de lápis (Edit this file) no canto superior direito do arquivo.</li>
+    <li>Apague todo o conteúdo atual (Ctrl+A, depois Delete).</li>
+    <li>Cole o conteúdo do novo <code>daily.json</code> (Ctrl+V).</li>
+    <li>Role até o final da página e clique em <strong>Commit changes</strong>.</li>
+    <li>Aguarde uns 2 minutos e acesse a plataforma - os dados novos aparecerão automaticamente.</li>
+  </ol>
+</div>
+
+<footer>
+  Ferramenta utilitária · processamento local no navegador · nenhum dado é enviado para servidores externos
+</footer>
+
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var currentDaily = [];   // daily.json carregado (base)
+var newDays = [];        // novos dias extraídos do xlsx
+var mergedDaily = [];    // resultado final merged
+
+// ====== helpers ======
+function el(id){return document.getElementById(id);}
+function setStatus(id, cls, txt){
+  var d = el(id);
+  d.innerHTML = '<div class="status '+cls+'">'+txt+'</div>';
+}
+function clearStatus(id){el(id).innerHTML='';}
+function fmt(n, dec){
+  dec = dec==null?2:dec;
+  if(n==null||isNaN(n)) return '-';
+  return Number(n).toFixed(dec);
+}
+
+// ====== ETAPA 1: carregar daily.json ======
+async function fetchFromGitHub(){
+  setStatus('daily-status','info','Buscando daily.json do GitHub...');
+  try{
+    var url = 'https://raw.githubusercontent.com/ernandes-sobreira/estacao-clima-unemat/main/daily.json?t='+Date.now();
+    var r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var data = await r.json();
+    if(!Array.isArray(data)) throw new Error('JSON não é um array');
+    currentDaily = data;
+    var first = data[0] ? data[0].date : '?';
+    var last = data[data.length-1] ? data[data.length-1].date : '?';
+    setStatus('daily-status','ok',
+      '<strong>daily.json carregado do GitHub:</strong> '+data.length+' registros '+
+      '('+first+' até '+last+')');
+    tryMerge();
+  }catch(e){
+    setStatus('daily-status','er',
+      '<strong>Erro ao buscar do GitHub:</strong> '+e.message+
+      '<br><span class="muted">Você pode usar o botão ao lado para carregar o arquivo do computador.</span>');
+  }
+}
+
+function loadDailyFromFile(file){
+  setStatus('daily-status','info','Lendo arquivo...');
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var data = JSON.parse(ev.target.result);
+      if(!Array.isArray(data)) throw new Error('JSON não é um array');
+      currentDaily = data;
+      var first = data[0] ? data[0].date : '?';
+      var last = data[data.length-1] ? data[data.length-1].date : '?';
+      setStatus('daily-status','ok',
+        '<strong>daily.json carregado:</strong> '+data.length+' registros '+
+        '('+first+' até '+last+')');
+      tryMerge();
+    }catch(e){
+      setStatus('daily-status','er','<strong>Erro ao ler arquivo:</strong> '+e.message);
+    }
+  };
+  reader.onerror = function(){
+    setStatus('daily-status','er','<strong>Erro de leitura do arquivo.</strong>');
+  };
+  reader.readAsText(file);
+}
+
+// ====== ETAPA 2: parser HOBOlink ======
+// HOBOlink exporta dates no formato MM/DD/YY (americano)
+function parseHoboDate(val){
+  if(val==null) return null;
+  // XLSX pode ter convertido para Date object ou para número serial
+  if(val instanceof Date){
+    // já é data válida, retorna YYYY-MM-DD
+    var y = val.getFullYear();
+    var m = val.getMonth()+1;
+    var d = val.getDate();
+    return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  }
+  if(typeof val === 'number'){
+    // número serial Excel → JS Date (Excel epoch: 1899-12-30)
+    var jsDate = new Date((val - 25569) * 86400 * 1000);
+    return jsDate.toISOString().slice(0,10);
+  }
+  if(typeof val === 'string'){
+    var s = val.trim();
+    // Formato MM/DD/YY ou MM/DD/YYYY
+    var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+    if(m){
+      var mo = parseInt(m[1],10);
+      var dy = parseInt(m[2],10);
+      var yr = parseInt(m[3],10);
+      if(yr < 100) yr = 2000 + yr;
+      // validação: mês 1-12, dia 1-31
+      if(mo<1||mo>12||dy<1||dy>31) return null;
+      return yr+'-'+String(mo).padStart(2,'0')+'-'+String(dy).padStart(2,'0');
+    }
+    // Formato ISO YYYY-MM-DD
+    var mi = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(mi) return mi[1]+'-'+mi[2]+'-'+mi[3];
+    return null;
+  }
+  return null;
+}
+
+// Detecta qual coluna é qual pelo cabeçalho
+function detectColumns(header){
+  var idx = {
+    date: -1, time: -1,
+    temp: -1, humidity: -1, rain: -1, solar: -1,
+    wind: -1, gust: -1, dew: -1, pressure: -1
+  };
+  for(var i=0;i<header.length;i++){
+    var h = String(header[i]||'').toLowerCase();
+    if(idx.date<0 && (h.indexOf('date')>=0 && h.indexOf('time')<0)) idx.date = i;
+    else if(idx.time<0 && (h==='time' || h.indexOf('time')>=0 && h.indexOf('date')<0)) idx.time = i;
+    else if(idx.temp<0 && (h.indexOf('temp')>=0 && h.indexOf('dew')<0)) idx.temp = i;
+    else if(idx.humidity<0 && (h.indexOf('rh')>=0 || h.indexOf('humid')>=0)) idx.humidity = i;
+    else if(idx.rain<0 && (h.indexOf('rain')>=0 || h.indexOf('precip')>=0)) idx.rain = i;
+    else if(idx.solar<0 && (h.indexOf('solar')>=0 || h.indexOf('radiation')>=0)) idx.solar = i;
+    else if(idx.gust<0 && h.indexOf('gust')>=0) idx.gust = i;
+    else if(idx.wind<0 && (h.indexOf('wind speed')>=0 || (h.indexOf('wind')>=0 && h.indexOf('dir')<0))) idx.wind = i;
+    else if(idx.dew<0 && h.indexOf('dew')>=0) idx.dew = i;
+    else if(idx.pressure<0 && (h.indexOf('pressure')>=0 || h.indexOf('baro')>=0)) idx.pressure = i;
+  }
+  return idx;
+}
+
+function findHeaderRow(rows){
+  // procurar linha com "Date" e algum sensor
+  for(var i=0;i<Math.min(20,rows.length);i++){
+    var row = rows[i];
+    if(!row) continue;
+    var hasDate = false, hasSensor = false;
+    for(var j=0;j<row.length;j++){
+      var v = String(row[j]||'').toLowerCase();
+      if(v.indexOf('date')>=0) hasDate = true;
+      if(v.indexOf('temp')>=0 || v.indexOf('rh')>=0 || v.indexOf('rain')>=0 || v.indexOf('solar')>=0) hasSensor = true;
+    }
+    if(hasDate && hasSensor) return i;
+  }
+  return -1;
+}
+
+function processXlsx(file){
+  setStatus('xlsx-status','info','Lendo planilha...');
+  el('preview-wrap').classList.add('hidden');
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var data = new Uint8Array(ev.target.result);
+      // HOBOlink exporta datas como STRING literal 'MM/DD/YY' (General format).
+      // Desativamos cellDates para que o SheetJS NÃO tente converter para Date
+      // - assim nosso parseHoboDate recebe a string pura e interpreta corretamente.
+      var wb = XLSX.read(data, {type:'array', cellDates:false});
+      var ws = wb.Sheets[wb.SheetNames[0]];
+      var rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:true});
+
+      if(!rows.length) throw new Error('Planilha vazia');
+
+      // encontrar linha de cabeçalho
+      var hdrIdx = findHeaderRow(rows);
+      if(hdrIdx < 0) throw new Error('Não encontrei o cabeçalho (linha com "Date" e sensores)');
+      var header = rows[hdrIdx];
+      var cols = detectColumns(header);
+
+      if(cols.date < 0) throw new Error('Coluna de data não encontrada');
+      if(cols.temp < 0 && cols.humidity < 0 && cols.rain < 0 && cols.solar < 0){
+        throw new Error('Nenhuma coluna de sensor reconhecida');
+      }
+
+      // agregar por dia
+      var byDay = {};
+      var badDates = 0;
+      for(var i=hdrIdx+1; i<rows.length; i++){
+        var row = rows[i];
+        if(!row || row.length===0) continue;
+        var ds = parseHoboDate(row[cols.date]);
+        if(!ds){ badDates++; continue; }
+
+        if(!byDay[ds]){
+          byDay[ds] = {
+            date: ds,
+            year: parseInt(ds.slice(0,4),10),
+            month: parseInt(ds.slice(5,7),10),
+            temps:[], hums:[], rains:[], solars:[],
+            winds:[], gusts:[], dews:[], prs:[],
+            n:0
+          };
+        }
+        var bd = byDay[ds];
+        function pv(ix){
+          if(ix<0) return null;
+          var v = row[ix];
+          if(v==null||v==='') return null;
+          var n = Number(v);
+          return isNaN(n) ? null : n;
+        }
+        var t = pv(cols.temp), h = pv(cols.humidity), rn = pv(cols.rain),
+            s = pv(cols.solar), w = pv(cols.wind), g = pv(cols.gust),
+            dp = pv(cols.dew), p = pv(cols.pressure);
+        if(t!=null) bd.temps.push(t);
+        if(h!=null) bd.hums.push(h);
+        if(rn!=null) bd.rains.push(rn);
+        if(s!=null) bd.solars.push(s);
+        if(w!=null) bd.winds.push(w);
+        if(g!=null) bd.gusts.push(g);
+        if(dp!=null) bd.dews.push(dp);
+        if(p!=null) bd.prs.push(p);
+        bd.n++;
+      }
+
+      function avg(a){if(!a.length) return null;var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+      function minV(a){if(!a.length) return null;var m=a[0];for(var i=1;i<a.length;i++)if(a[i]<m)m=a[i];return m;}
+      function maxV(a){if(!a.length) return null;var m=a[0];for(var i=1;i<a.length;i++)if(a[i]>m)m=a[i];return m;}
+      function sumV(a){if(!a.length) return null;var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s;}
+      function r2(x){return x==null?null:Math.round(x*100)/100;}
+      function r3(x){return x==null?null:Math.round(x*1000)/1000;}
+
+      newDays = Object.values(byDay).map(function(d){
+        var tn = minV(d.temps), tx = maxV(d.temps), tm = avg(d.temps);
+        return {
+          date: d.date,
+          year: d.year,
+          month: d.month,
+          temp_mean: r2(tm),
+          temp_min: r2(tn),
+          temp_max: r2(tx),
+          temp_amp: (tn!=null && tx!=null) ? r2(tx-tn) : null,
+          humidity_mean: r2(avg(d.hums)),
+          pressure_mean: r2(avg(d.prs)),
+          rain_total: r2(sumV(d.rains)),
+          solar_mean: r2(avg(d.solars)),
+          solar_max: r2(maxV(d.solars)),
+          wind_mean: r3(avg(d.winds)),
+          wind_max: r2(maxV(d.gusts)),
+          dew_point_mean: r2(avg(d.dews)),
+          n_obs: d.n
+        };
+      }).sort(function(a,b){return a.date.localeCompare(b.date);});
+
+      if(!newDays.length){
+        throw new Error('Nenhum dia válido encontrado na planilha');
+      }
+
+      var msg = '<strong>Planilha processada:</strong> '+newDays.length+' dias extraídos '+
+                '('+newDays[0].date+' até '+newDays[newDays.length-1].date+')';
+      if(badDates>0) msg += '<br><span class="muted">'+badDates+' linhas com data inválida foram ignoradas</span>';
+      setStatus('xlsx-status','ok', msg);
+
+      showPreview();
+      tryMerge();
+    }catch(e){
+      setStatus('xlsx-status','er','<strong>Erro:</strong> '+e.message);
+      console.error(e);
+    }
+  };
+  reader.onerror = function(){
+    setStatus('xlsx-status','er','<strong>Erro de leitura do arquivo.</strong>');
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function showPreview(){
+  el('preview-wrap').classList.remove('hidden');
+  var existSet = new Set(currentDaily.map(function(d){return d.date;}));
+  var added = newDays.filter(function(r){return !existSet.has(r.date);});
+  var updated = newDays.filter(function(r){return existSet.has(r.date);});
+
+  var kpis = [
+    ['Dias na planilha', newDays.length],
+    ['Dias NOVOS', added.length],
+    ['Dias atualizados', updated.length],
+    ['Total após merge', currentDaily.length + added.length]
+  ];
+  el('kpis').innerHTML = kpis.map(function(k){
+    return '<div class="kpi"><div class="kpi-lbl">'+k[0]+'</div>'+
+           '<div class="kpi-val">'+k[1]+'</div></div>';
+  }).join('');
+
+  var tb = el('preview-tb').querySelector('tbody');
+  var rowsToShow = added.length ? added : newDays;
+  tb.innerHTML = rowsToShow.slice(0, 100).map(function(d){
+    return '<tr>'+
+      '<td>'+d.date+'</td>'+
+      '<td>'+fmt(d.temp_mean,1)+'</td>'+
+      '<td>'+fmt(d.temp_min,1)+'</td>'+
+      '<td>'+fmt(d.temp_max,1)+'</td>'+
+      '<td>'+fmt(d.humidity_mean,1)+'</td>'+
+      '<td>'+fmt(d.rain_total,1)+'</td>'+
+      '<td>'+fmt(d.solar_mean,0)+'</td>'+
+      '<td>'+d.n_obs+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+// ====== ETAPA 3: merge + download ======
+function tryMerge(){
+  if(!currentDaily.length || !newDays.length){
+    el('btn-download').disabled = true;
+    el('btn-copy').disabled = true;
+    return;
+  }
+  // Merge: dias novos substituem antigos se mesma data
+  var byDate = {};
+  currentDaily.forEach(function(d){byDate[d.date] = d;});
+  newDays.forEach(function(d){byDate[d.date] = d;});
+  mergedDaily = Object.values(byDate).sort(function(a,b){
+    return a.date.localeCompare(b.date);
+  });
+
+  el('btn-download').disabled = false;
+  el('btn-copy').disabled = false;
+
+  var txt = JSON.stringify(mergedDaily, null, 2);
+  var preview = txt.length > 2000 ? txt.slice(0,2000) + '\n...' : txt;
+  el('preview-json').value = preview;
+  el('preview-json-wrap').classList.remove('hidden');
+
+  setStatus('final-status','ok',
+    '<strong>daily.json pronto:</strong> '+mergedDaily.length+' registros '+
+    '('+mergedDaily[0].date+' até '+mergedDaily[mergedDaily.length-1].date+')');
+}
+
+function downloadDaily(){
+  if(!mergedDaily.length) return;
+  var txt = JSON.stringify(mergedDaily, null, 2);
+  var blob = new Blob([txt], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'daily.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyDaily(){
+  if(!mergedDaily.length) return;
+  var txt = JSON.stringify(mergedDaily, null, 2);
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn = el('btn-copy');
+    var orig = btn.innerHTML;
+    btn.innerHTML = 'Copiado!';
+    setTimeout(function(){btn.innerHTML = orig;}, 2000);
+  }).catch(function(e){
+    alert('Erro ao copiar: '+e.message);
+  });
+}
+
+// ====== event handlers ======
+el('btn-fetch-gh').addEventListener('click', fetchFromGitHub);
+el('daily-file').addEventListener('change', function(e){
+  if(e.target.files[0]) loadDailyFromFile(e.target.files[0]);
+});
+
+var dz = el('dz');
+var xi = el('xlsx-file');
+dz.addEventListener('click', function(){xi.click();});
+xi.addEventListener('change', function(e){
+  if(e.target.files[0]) processXlsx(e.target.files[0]);
+});
+dz.addEventListener('dragover', function(e){
+  e.preventDefault(); dz.classList.add('drag');
+});
+dz.addEventListener('dragleave', function(){dz.classList.remove('drag');});
+dz.addEventListener('drop', function(e){
+  e.preventDefault(); dz.classList.remove('drag');
+  if(e.dataTransfer.files[0]) processXlsx(e.dataTransfer.files[0]);
+});
+
+el('btn-download').addEventListener('click', downloadDaily);
+el('btn-copy').addEventListener('click', copyDaily);
+
+// Tentar carregar automaticamente do GitHub ao abrir
+fetchFromGitHub();
+
+})();
+</script>
+</body>
+</html>

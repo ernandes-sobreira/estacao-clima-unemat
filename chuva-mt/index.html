@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07120f">
+  <title>CHUVA MT — Monitoramento de precipitação</title>
+  <meta name="description" content="Painel público de precipitação em Mato Grosso com dados CHIRPS, comparação histórica e análises estatísticas.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌧️</text></svg>">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="loading" class="loading">
+  <div class="loader-card">
+    <div class="eyebrow">CHUVA MT</div>
+    <h3>Montando o retrato da chuva</h3>
+    <p id="loadingText" class="sub">Lendo a série histórica municipal…</p>
+    <div class="bar"><div></div></div>
+  </div>
+</div>
+
+<main class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brandmark">MT</div>
+      <div><h1>CHUVA MT</h1><p>chuva explicada, município por município</p></div>
+    </div>
+    <div class="nav-actions">
+      <button id="downloadBtn" class="btn ghost">Baixar dados</button>
+      <a class="btn" href="admin.html">Atualizar</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Monitoramento por satélite • Mato Grosso</div>
+      <h2 id="heroPeriod">—</h2>
+      <p class="hero-sub">Compare o mês com três décadas de história e descubra onde a chuva realmente fugiu do normal.</p>
+      <div class="period-row">
+        <select id="periodSelect" aria-label="Período"></select>
+        <span id="dataStatus" class="status"><span class="dot"></span><span>—</span></span>
+        <span class="status">CHIRPS</span>
+      </div>
+      <div id="story" class="story">Carregando interpretação…</div>
+    </div>
+    <div class="hero-side">
+      <div class="metric"><span>Média no estado</span><strong id="stateRain">—</strong><small>precipitação mensal</small></div>
+      <div class="metric"><span>Diferença da média</span><strong id="stateAnomaly">—</strong><small>1996–2025</small></div>
+      <div class="metric"><span>Posição histórica</span><strong id="stateRank">—</strong><small id="stateRankSub">entre os anos comparáveis</small></div>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="Seções">
+    <button class="tab active" data-tab="overview">Visão geral</button>
+    <button class="tab" data-tab="municipios">Municípios</button>
+    <button class="tab" data-tab="advanced">Análise avançada</button>
+    <button class="tab" data-tab="method">Metodologia</button>
+  </nav>
+
+  <section id="overview" class="section active">
+    <div class="grid2">
+      <article class="card">
+        <h3>Onde choveu diferente?</h3>
+        <p class="sub">Anomalia em relação à média histórica do mesmo mês. Clique em um município.</p>
+        <div id="map" class="map"></div>
+      </article>
+      <article class="card">
+        <div class="control-row">
+          <div style="flex:1">
+            <h3>Extremos do mês</h3>
+            <p class="sub">As maiores e menores precipitações municipais.</p>
+          </div>
+          <select id="rankMode" class="select">
+            <option value="wet">Mais chuvosos</option>
+            <option value="dry">Mais secos</option>
+            <option value="anom">Maior anomalia</option>
+          </select>
+        </div>
+        <div id="ranking" class="rank-list"></div>
+      </article>
+    </div>
+
+    <div class="grid2" style="margin-top:18px">
+      <article class="card">
+        <h3>Este mês através dos anos</h3>
+        <p class="sub">Média estadual ponderada pela área municipal.</p>
+        <div class="chartbox"><canvas id="stateChart"></canvas></div>
+      </article>
+      <article class="card">
+        <h3>O que chama atenção?</h3>
+        <p class="sub">Síntese automática dos contrastes espaciais.</p>
+        <div id="highlights" class="rank-list"></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="municipios" class="section">
+    <article class="card">
+      <div class="municipio-head">
+        <div>
+          <div class="eyebrow">Raio-X municipal</div>
+          <h3 id="municipioName" class="municipio-title">—</h3>
+        </div>
+        <select id="municipioSelect" class="select" style="min-width:280px"></select>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><span>Chuva</span><strong id="munRain">—</strong></div>
+        <div class="stat"><span>Média histórica</span><strong id="munMean">—</strong></div>
+        <div class="stat"><span>Anomalia</span><strong id="munAnom">—</strong></div>
+        <div class="stat"><span>Ranking</span><strong id="munRank">—</strong></div>
+      </div>
+      <div class="chartbox"><canvas id="munChart"></canvas></div>
+    </article>
+  </section>
+
+  <section id="advanced" class="section">
+    <article class="card">
+      <div class="control-row">
+        <div style="flex:1">
+          <h3>Estatística avançada, sem esconder o método</h3>
+          <p class="sub">Escolha o estado ou um município. A análise usa o mesmo mês ao longo dos anos.</p>
+        </div>
+        <select id="advancedScope" class="select"></select>
+      </div>
+      <div class="advanced-grid">
+        <div class="analysis-card"><span>Tendência linear</span><strong id="trendSlope">—</strong><small id="trendSlopeNote">mm por década</small></div>
+        <div class="analysis-card"><span>R²</span><strong id="trendR2">—</strong><small>força explicativa da tendência linear</small></div>
+        <div class="analysis-card"><span>Mann–Kendall</span><strong id="mkP">—</strong><small id="mkNote">teste não paramétrico de tendência</small></div>
+        <div class="analysis-card"><span>Inclinação de Sen</span><strong id="senSlope">—</strong><small>estimativa robusta da mudança por década</small></div>
+        <div class="analysis-card"><span>Coeficiente de variação</span><strong id="cvValue">—</strong><small>variabilidade relativa da precipitação</small></div>
+        <div class="analysis-card"><span>Extremos históricos</span><strong id="extremeCount">—</strong><small>anos acima do P90 / abaixo do P10</small></div>
+      </div>
+      <div class="chartbox" style="margin-top:18px"><canvas id="advancedChart"></canvas></div>
+    </article>
+  </section>
+
+  <section id="method" class="section">
+    <article class="card method">
+      <h3>Como ler este painel</h3>
+      <p><strong>Fonte.</strong> Precipitação estimada por satélite CHIRPS, Climate Hazards Center/UCSB. O histórico municipal usado como referência cobre 1996–2025. Meses novos podem ser publicados como <em>preliminares</em> e posteriormente substituídos por versões finais.</p>
+      <p><strong>Municípios.</strong> A precipitação de cada município é calculada por estatística zonal sobre os pixels do raster, e não apenas pelo ponto da sede municipal.</p>
+      <p><strong>Estado.</strong> A média de Mato Grosso é ponderada pela área dos municípios. Isso evita que municípios muito pequenos tenham o mesmo peso de municípios territorialmente extensos.</p>
+      <p><strong>Anomalia.</strong> Diferença entre o valor observado e a média 1996–2025 do mesmo mês. O percentual é relativo à média histórica.</p>
+      <p><strong>Ranking e percentis.</strong> Sempre comparamos janeiro com janeiros, setembro com setembros e assim por diante. Isso evita confundir sazonalidade com extremos.</p>
+      <p><strong>Tendências.</strong> O painel calcula regressão linear, R², teste de Mann–Kendall e inclinação de Sen. Esses métodos ajudam a distinguir uma sequência visualmente impressionante de uma tendência estatisticamente sustentada.</p>
+      <div class="notice">Versões preliminares são ótimas para acompanhamento rápido, mas resultados destinados a publicação científica devem ser revisados quando o produto consolidado estiver disponível.</div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span>CHUVA MT • monitoramento climático aberto e didático</span>
+    <span id="updatedAt">Dados carregados localmente e do banco público.</span>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

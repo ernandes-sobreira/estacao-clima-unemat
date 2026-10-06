@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07120f">
+  <title>CHUVA MT — Atualizar dados</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌧️</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="admin-wrap">
+  <header class="topbar">
+    <div class="brand"><div class="brandmark">MT</div><div><h1>CHUVA MT</h1><p>área de atualização</p></div></div>
+    <a class="btn ghost" href="index.html">← Voltar ao painel</a>
+  </header>
+
+  <section id="loginBox" class="login-card">
+    <div class="eyebrow">Acesso restrito</div>
+    <h2>Atualizar a chuva</h2>
+    <p class="hero-sub">Entre com sua conta autorizada. O público pode consultar os resultados, mas somente o administrador publica novos rasters.</p>
+    <div class="form-grid">
+      <input id="email" class="input" type="email" autocomplete="email" placeholder="Seu e-mail">
+      <input id="password" class="input" type="password" autocomplete="current-password" placeholder="Sua senha">
+      <button id="loginBtn" class="primary">Entrar</button>
+      <button id="magicBtn">Enviar link de acesso por e-mail</button>
+      <div id="loginMsg" class="notice hidden"></div>
+    </div>
+  </section>
+
+  <section id="uploadBox" class="upload-card hidden">
+    <div class="municipio-head">
+      <div><div class="eyebrow">Pipeline automático</div><h2 style="margin:6px 0">Solte o GeoTIFF. O resto é automático.</h2></div>
+      <button id="logoutBtn">Sair</button>
+    </div>
+    <div class="notice" style="margin-bottom:18px">
+      O raster é processado localmente no seu navegador. O arquivo bruto não precisa ser enviado ao servidor; apenas os resultados municipais e o registro da atualização são publicados.
+    </div>
+
+    <label id="dropzone" class="dropzone" for="fileInput">
+      <strong>Arraste o .tif aqui</strong>
+      <span>ou toque para escolher o arquivo CHIRPS</span>
+      <input id="fileInput" type="file" accept=".tif,.tiff,image/tiff" hidden>
+    </label>
+
+    <div id="metaBox" class="hidden" style="margin-top:18px">
+      <div class="grid3">
+        <label>Produto<input id="product" class="input" value="CHIRPS"></label>
+        <label>Versão<input id="version" class="input" value="v3.0"></label>
+        <label>Status<select id="status" class="input"><option value="preliminar">Preliminar</option><option value="final">Final</option></select></label>
+        <label>Ano<input id="year" class="input" type="number" min="1981" max="2100"></label>
+        <label>Mês<input id="month" class="input" type="number" min="1" max="12"></label>
+        <label>Arquivo<input id="filename" class="input" readonly></label>
+      </div>
+      <button id="processBtn" class="primary" style="margin-top:14px">Processar e publicar</button>
+    </div>
+
+    <div id="workBox" class="hidden" style="margin-top:22px">
+      <div class="control-row"><strong id="stage">Preparando…</strong><span id="counter" class="status">0%</span></div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="summary" class="notice hidden" style="margin-top:16px"></div>
+      <div id="log" class="log" style="margin-top:14px"></div>
+    </div>
+
+    <div id="previewBox" class="hidden" style="margin-top:20px">
+      <h3>Conferência rápida</h3>
+      <p class="sub">Extremos calculados antes da publicação.</p>
+      <div style="overflow:auto"><table class="preview-table"><thead><tr><th>Município</th><th>Chuva</th></tr></thead><tbody id="previewRows"></tbody></table></div>
+    </div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@3.0.5/dist-browser/geotiff.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body></html>
